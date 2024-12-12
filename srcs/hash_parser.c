@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   hash_parser.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:02 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/10 00:16:20 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:10:37 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/ft_ssl.h"
 
-static void	parse_options(int opt, t_arguments *args)
+static void	parse_options(int opt, t_hash_args *args)
 {
 	if (opt == 'h')
-		print_usage();
+		print_hash_usage();
 	else if (opt == 'p')
 		args->echo_stdin = true;
 	else if (opt == 'q')
@@ -34,7 +34,7 @@ static void	parse_options(int opt, t_arguments *args)
 	}
 }
 
-static void	parse_hash_function(t_arguments *args, char *hash)
+static void	parse_hash_function(t_hash_args *args, char *hash)
 {
 	if (!ft_strncmp(hash, "md5", 3) && ft_strlen(hash) == 3)
 		args->hash_function = 0;
@@ -55,7 +55,7 @@ static void	parse_hash_function(t_arguments *args, char *hash)
 // BUFFER_SIZE bytes and with the help of 'realloc' and 'ft_memcpy', the whole
 // message is stored in 'input_pipe'. If the file is empty, the program will not
 // read anything and the input_pipe will be NULL.
-static void	parse_pipe(t_arguments *args)
+static void	parse_pipe(t_hash_args *args)
 {
 	char		buffer[BUFFER_SIZE];
 	char		*temp;
@@ -68,7 +68,7 @@ static void	parse_pipe(t_arguments *args)
 	{
 		temp = realloc(args->input_pipe, args->pipe_size + (size_t)bytes_read);
 		if (!temp)
-			print_strerror_and_exit("realloc", args);
+			print_hash_strerror_and_exit("realloc", args);
 		args->input_pipe = temp;
 		ft_memcpy(args->input_pipe + args->pipe_size, buffer, \
 		(size_t)bytes_read);
@@ -88,7 +88,7 @@ static void	parse_pipe(t_arguments *args)
 // and also for the 'munmap' function to know how many bytes to unmap when the
 // program finishes. Empty file case is handled too, otherwise 'mmap' would
 // fail.
-void	parse_file_content(t_arguments *args, char *file_name)
+static void	parse_file_content(t_hash_args *args, char *file_name)
 {
 	int			fd;
 	struct stat	file_stat;
@@ -96,9 +96,9 @@ void	parse_file_content(t_arguments *args, char *file_name)
 
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
-		print_strerror_and_exit(file_name, args);
+		print_hash_strerror_and_exit(file_name, args);
 	if (fstat(fd, &file_stat) < 0)
-		print_strerror_and_exit(file_name, args);
+		print_hash_strerror_and_exit(file_name, args);
 	if (file_stat.st_size > 0)
 	{
 		file_content = mmap(NULL, (size_t)file_stat.st_size, PROT_READ, \
@@ -106,7 +106,7 @@ void	parse_file_content(t_arguments *args, char *file_name)
 		if (file_content == MAP_FAILED)
 		{
 			close(fd);
-			print_strerror_and_exit("mmap", args);
+			print_hash_strerror_and_exit("mmap", args);
 		}
 		args->input_file = (char *)file_content;
 	}
@@ -118,7 +118,7 @@ void	parse_file_content(t_arguments *args, char *file_name)
 }
 
 // Parse main function.
-void	parse_arguments(int argc, char **argv, t_arguments *args)
+void	parse_hash_arguments(int argc, char **argv, t_hash_args *args)
 {
 	int		opt;
 

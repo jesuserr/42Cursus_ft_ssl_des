@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 14:32:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/03 14:46:18 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:24:53 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              HEADERS
 */
-# include "types.h"
+# include "types_hash.h"
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -33,7 +33,7 @@
 */
 typedef struct s_sha224_data
 {
-	t_arguments	*args;			// Passed as a pointer to avoid copying
+	t_hash_args	*args;			// Passed as a pointer to avoid copying
 	uint64_t	msg_len;
 	char		*pad_msg;
 	uint64_t	pad_len;
@@ -75,6 +75,6 @@ static const uint32_t	g_sha224_roots_add[64] = {
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                        FUNCTION PROTOTYPES
 */
-void	sha224_sum(t_arguments *args);
+void	sha224_sum(t_hash_args *args);
 
 #endif

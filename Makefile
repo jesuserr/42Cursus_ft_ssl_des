@@ -6,15 +6,15 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 17:09:51 by jesuserr          #+#    #+#              #
-#    Updated: 2024/12/09 11:10:33 by jesuserr         ###   ########.fr        #
+#    Updated: 2024/12/12 20:17:39 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 LIBFT_DIR = libft/
 
 NAME = ft_ssl
-SRCS = main.c parser.c md5.c print_utils.c sha256.c bitwise_utils.c sha224.c \
-	   sha512.c sha384.c interactive.c
+SRCS = main.c print_utils.c bitwise_utils.c \
+	   hash_parser.c hash_utils.c md5.c sha224.c sha256.c sha384.c sha512.c
 PATH_SRCS = ./srcs/
 PATH_INCS = ./srcs/incs/
 PATH_OBJS = ./objs/
@@ -28,7 +28,7 @@ RM = rm -f
 CFLAGS = -Wall -Wextra -Werror -g -pedantic -Wshadow
 LDFLAGS = -lm
 
-NORM = $(addprefix $(PATH_SRCS), $(SRCS)) $(PATH_INCS)*.h
+NORM = $(addprefix $(PATH_SRCS), $(SRCS)) #$(PATH_INCS)*.h
 GREEN = "\033[0;92m"
 RED = "\033[0;91m"
 BLUE = "\033[0;94m"

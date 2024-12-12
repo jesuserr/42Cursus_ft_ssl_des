@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 08:51:27 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/10 00:02:40 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/12 19:54:18 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	create_padded_message(t_sha384_data *ssl_data)
 	ssl_data->pad_len = len;
 	ssl_data->pad_msg = ft_calloc(ssl_data->pad_len, sizeof(uint8_t));
 	if (!ssl_data->pad_msg)
-		print_strerror_and_exit("ft_calloc", ssl_data->args);
+		print_hash_strerror_and_exit("ft_calloc", ssl_data->args);
 	ft_memcpy(ssl_data->pad_msg, ssl_data->args->message, ssl_data->msg_len);
 	ssl_data->pad_msg[ssl_data->msg_len] = (int8_t)0x80;
 	len_bits = ssl_data->msg_len * 8;
@@ -109,7 +109,7 @@ static void	compression_function(t_sha384_data *ssl_data, uint8_t i)
 // ssl_data, they are passed as a parameter to make the function more readable.
 // 'ssl_data.digest[G]' and 'ssl_data.digest[H]' are omitted because are not 
 // part of the SHA384 digest.
-static void	print_sha384_digest(t_sha384_data *ssl_data, t_arguments *args)
+static void	print_sha384_digest(t_sha384_data *ssl_data, t_hash_args *args)
 {
 	uint8_t	i;
 
@@ -138,7 +138,7 @@ static void	print_sha384_digest(t_sha384_data *ssl_data, t_arguments *args)
 }
 
 // Main function to calculate the SHA384 digest.
-void	sha384_sum(t_arguments *args)
+void	sha384_sum(t_hash_args *args)
 {
 	t_sha384_data	ssl_data;
 	uint8_t			i;

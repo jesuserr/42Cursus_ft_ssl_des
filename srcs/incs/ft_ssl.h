@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/09 23:02:09 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:24:48 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 # include "../../libft/includes/ft_printf.h"		// ft_printf
 # include "../../libft/includes/get_next_line.h"	// get_next_line
 # include <stdint.h>							// for fixed-width integer types
-# include "types.h"								// for t_arguments
+# include <stdbool.h>							// for booleans
+# include "types_hash.h"						// for t_hash_args
+# include "types_enc.h"							// for t_enc_args
 # include "md5.h"								// for MD5 hash function
 # include "sha256.h"							// for SHA256 hash function
 # include "sha224.h"							// for SHA224 hash function
@@ -36,11 +38,15 @@
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
+**                              DEFINES
+*/
+# define HASH_COMMAND       1           // Pre-parser detected a hash command
+# define ENCODE_COMMAND     2           // Pre-parser detected an encode command
+
+/*
+** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                        FUNCTION PROTOTYPES
 */
-/********************************** parser.c **********************************/
-void		parse_arguments(int argc, char **argv, t_arguments *args);
-
 /********************************** bitwise_utils.c ***************************/
 uint32_t	right_rotation(uint32_t nbr, uint8_t bits);
 uint32_t	left_rotation(uint32_t nbr, uint8_t bits);
@@ -48,15 +54,20 @@ void		modify_endianness_32_bits(uint32_t *nbr);
 void		modify_endianness_64_bits(uint64_t *nbr);
 uint64_t	right_rotation_64(uint64_t nbr, int8_t bits);
 
-/********************************** print_utils.c *****************************/
-void		print_usage(void);
-void		print_hex_bytes(uint8_t *byte, uint8_t start, uint8_t end);
-void		print_strerror_and_exit(char *msg, t_arguments *args);
-void		print_error_and_exit(char *str);
-void		print_prehash_output(char *algorithm, t_arguments *args);
+/********************************** hash_parser.c *****************************/
+void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);
 
-/********************************** interactive.c *****************************/
-void		read_interactive_mode(t_arguments *args);
+/********************************** hash_utils.c *****************************/
+void		calls_to_hashing_function(t_hash_args *args);
+void		print_hash_usage(void);
+void		print_hash_strerror_and_exit(char *msg, t_hash_args *args);
+void		print_prehash_output(char *algorithm, t_hash_args *args);
 void		remove_newline_character(char *msg, uint64_t len);
+void		read_interactive_mode(t_hash_args *args);
+
+/********************************** print_utils.c *****************************/
+void		print_hex_bytes(uint8_t *byte, uint8_t start, uint8_t end);
+void		print_error_and_exit(char *str);
+void	    print_total_usage(void);
 
 #endif

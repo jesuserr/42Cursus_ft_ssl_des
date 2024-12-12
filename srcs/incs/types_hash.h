@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   types.h                                            :+:      :+:    :+:   */
+/*   types_hash.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:31:27 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/09 22:48:01 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:29:56 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TYPES_H
-# define TYPES_H
-
-/*
-** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
-**                              HEADERS
-*/
-# include <stdbool.h>			// for booleans
+#ifndef TYPES_HASH_H
+# define TYPES_HASH_H
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              STRUCTS
 */
-typedef struct s_arguments
+typedef struct s_hash_args
 {
 	char		*input_str;
 	char		*input_file;
@@ -38,7 +32,7 @@ typedef struct s_arguments
 	bool		quiet_mode;
 	bool		reverse_output;
 	bool		print_sum;
-}	t_arguments;
+}	t_hash_args;
 
 enum	e_words
 {

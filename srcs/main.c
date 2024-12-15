@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:21 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 16:27:57 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:19:13 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,7 @@ int	main(int argc, char **argv)
 	{
 		ft_bzero(&encode_args, sizeof(t_encode_args));
 		parse_encode_arguments(argc, argv, &encode_args);
-		ft_hex_dump(&encode_args, sizeof(t_encode_args), 8);
-		//ft_hex_dump(encode_args.input_file, encode_args.input_file_size, 64);
-		if (encode_args.input_pipe)
-			free(encode_args.input_pipe);
-		if (encode_args.input_file && encode_args.input_file_size > 0)
-			if (munmap(encode_args.input_file, encode_args.input_file_size) < 0)
-				print_encode_strerror_and_exit("munmap", &encode_args);
+		calls_to_decoding_function(&encode_args);
 	}
 	else
 		print_error_and_exit("Wrong Hash/Cypher command");

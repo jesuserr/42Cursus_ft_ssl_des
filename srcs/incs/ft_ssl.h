@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 15:36:46 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:16:01 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include "sha224.h"							// for SHA224 hash function
 # include "sha384.h"							// for SHA384 hash function
 # include "sha512.h"							// for SHA512 hash function
+# include "base64.h"							// for base64 encode function
 # include <string.h>							// for strerror
 # include <fcntl.h>								// for open
 # include <errno.h>								// for errno
@@ -61,6 +62,7 @@ void		read_interactive_mode(char **input_pipe, uint64_t *pipe_size);
 void		parse_encode_arguments(int argc, char **argv, t_encode_args *args);
 
 /********************************** encode_utils.c ****************************/
+void		calls_to_decoding_function(t_encode_args *args);
 void		print_encode_usage(void);
 void		print_encode_strerror_and_exit(char *msg, t_encode_args *args);
 

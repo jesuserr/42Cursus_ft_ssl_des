@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:02 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 15:55:08 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:05:34 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static void	parse_hash_function(t_hash_args *args, char *hash)
 // BUFFER_SIZE bytes and with the help of 'realloc' and 'ft_memcpy', the whole
 // message is stored in 'input_pipe'. If the file is empty, the program will not
 // read anything and the input_pipe will be NULL.
+// IMPORTANT: Since input can be binary, the message contained in 'input_pipe' 
+// is not null-terminated, and therefore cannot be printed with 'printf'.
 static void	parse_pipe(t_hash_args *args)
 {
 	char		buffer[BUFFER_SIZE];

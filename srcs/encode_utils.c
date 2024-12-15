@@ -6,11 +6,31 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 15:39:48 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:16:17 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/ft_ssl.h"
+
+void	calls_to_decoding_function(t_encode_args *args)
+{
+	if (args->input_pipe)
+	{
+		args->msg_origin = IS_PIPE;
+		args->message = args->input_pipe;
+		base64(args);
+		free(args->input_pipe);
+	}
+	if (args->input_file)
+	{
+		args->msg_origin = IS_FILE;
+		args->message = args->input_file;
+		base64(args);
+		if (args->input_file_size > 0)
+			if (munmap(args->input_file, args->input_file_size) < 0)
+				print_encode_strerror_and_exit("munmap", args);
+	}
+}
 
 void	print_encode_usage(void)
 {

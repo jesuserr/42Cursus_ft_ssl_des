@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:03:15 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 17:19:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:33:03 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static void	parse_options(int opt, t_encode_args *args)
 // BUFFER_SIZE bytes and with the help of 'realloc' and 'ft_memcpy', the whole
 // message is stored in 'input_pipe'. If the file is empty, the program will not
 // read anything and the input_pipe will be NULL.
+// IMPORTANT: Since input can be binary, the message contained in 'input_pipe' 
+// is not null-terminated, and therefore cannot be printed with 'printf'.
 static void	parse_pipe(t_encode_args *args)
 {
 	char		buffer[BUFFER_SIZE];

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:25:44 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/12 19:54:18 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:36:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,12 @@ static void	print_md5_digest(t_md5_data *ssl_data, t_hash_args *args)
 	uint8_t	i;
 
 	i = 0;
-	if (args->msg_origin == IS_PIPE)
-		remove_newline_character(args->message, args->pipe_size);
 	if (args->msg_origin == IS_PIPE && !args->echo_stdin && args->input_file)
 		return ;
 	if (args->quiet_mode)
 	{
 		if (args->echo_stdin && args->msg_origin == IS_PIPE)
-			ft_printf("%s\n", args->message);
+			print_message_from_pipe(args);
 		while (i < MD5_OUTPUT_SIZE / MD5_WORD_SIZE)
 			print_hex_bytes((uint8_t *)&(ssl_data->digest[i++]), 0, 3);
 		ft_printf("\n");

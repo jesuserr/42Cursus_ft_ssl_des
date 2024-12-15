@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 18:16:01 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:36:26 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void		calls_to_hashing_function(t_hash_args *args);
 void		print_hash_usage(void);
 void		print_hash_strerror_and_exit(char *msg, t_hash_args *args);
 void		print_prehash_output(char *algorithm, t_hash_args *args);
-void		remove_newline_character(char *msg, uint64_t len);
+void		print_message_from_pipe(t_hash_args *args);
 
 /********************************** print_utils.c *****************************/
 void		print_hex_bytes(uint8_t *byte, uint8_t start, uint8_t end);

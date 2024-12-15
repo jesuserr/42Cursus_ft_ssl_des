@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:47:43 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/12 20:14:37 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 13:59:13 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,23 +90,4 @@ void	remove_newline_character(char *msg, uint64_t len)
 {
 	if (len > 0 && msg[len - 1] == '\n')
 		msg[len - 1] = '\0';
-}
-
-// Reads from standard input and stores the string in the 'args->input_pipe'.
-// Uses 'gnl_strjoin' to concatenate the input lines and using the flag 'erase'
-// set to 1,  frees the previous content of the 'input_pipe' field.
-void	read_interactive_mode(t_hash_args *args)
-{
-	char	*input;
-
-	input = get_next_line(STDIN_FILENO);
-	args->input_pipe = ft_strdup("");
-	while (input)
-	{
-		args->input_pipe = gnl_strjoin(args->input_pipe, input, 1);
-		free(input);
-		input = get_next_line(STDIN_FILENO);
-	}
-	args->pipe_size = ft_strlen(args->input_pipe);
-	free(input);
 }

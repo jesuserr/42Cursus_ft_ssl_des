@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:21:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/12 20:24:02 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 13:14:05 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	print_total_usage(void)
 		"  -q          quiet mode\n"
 		"  -r          reverse the format of the output\n"
 		"  -s <string> print the sum of the given string\n\n"
-		"Cypher options:\n"
+		"Encode options:\n"
 		"  command     base64\n"
 		"  -h          print help and exit\n"
 		"  -d          decode mode\n"

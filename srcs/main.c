@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:21 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/12 20:23:55 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:27:57 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static uint8_t	pre_parser(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	t_hash_args	args;
-	t_enc_args	enc_args;
+	t_hash_args		args;
+	t_encode_args	encode_args;
 
 	if (pre_parser(argc, argv) == HASH_COMMAND)
 	{
@@ -42,8 +42,15 @@ int	main(int argc, char **argv)
 	}
 	else if (pre_parser(argc, argv) == ENCODE_COMMAND)
 	{
-		ft_bzero(&enc_args, sizeof(t_enc_args));
-		printf("Cypher command\n");
+		ft_bzero(&encode_args, sizeof(t_encode_args));
+		parse_encode_arguments(argc, argv, &encode_args);
+		ft_hex_dump(&encode_args, sizeof(t_encode_args), 8);
+		//ft_hex_dump(encode_args.input_file, encode_args.input_file_size, 64);
+		if (encode_args.input_pipe)
+			free(encode_args.input_pipe);
+		if (encode_args.input_file && encode_args.input_file_size > 0)
+			if (munmap(encode_args.input_file, encode_args.input_file_size) < 0)
+				print_encode_strerror_and_exit("munmap", &encode_args);
 	}
 	else
 		print_error_and_exit("Wrong Hash/Cypher command");

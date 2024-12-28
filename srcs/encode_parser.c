@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:03:15 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 18:33:03 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/28 21:39:43 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,11 @@ static void	parse_options(int opt, t_encode_args *args)
 		args->encode_mode = true;
 	else if (opt == 'i' && !args->input_from_file)
 	{
-		if (!ft_isalnum(optarg[0]))
-			print_error_and_exit("No input file specified");
 		args->input_from_file = true;
 		args->input_file_name = optarg;
 	}
 	else if (opt == 'o' && !args->output_to_file)
 	{
-		if (!ft_isalnum(optarg[0]))
-			print_error_and_exit("No output file specified");
 		args->output_to_file = true;
 		args->output_file_name = optarg;
 	}

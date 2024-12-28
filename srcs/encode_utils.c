@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 18:16:17 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/27 21:54:19 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	calls_to_decoding_function(t_encode_args *args)
 	{
 		args->msg_origin = IS_PIPE;
 		args->message = args->input_pipe;
+		args->message_length = args->pipe_size;
 		base64(args);
 		free(args->input_pipe);
 	}
@@ -25,6 +26,7 @@ void	calls_to_decoding_function(t_encode_args *args)
 	{
 		args->msg_origin = IS_FILE;
 		args->message = args->input_file;
+		args->message_length = args->input_file_size;
 		base64(args);
 		if (args->input_file_size > 0)
 			if (munmap(args->input_file, args->input_file_size) < 0)
@@ -49,7 +51,6 @@ void	print_encode_usage(void)
 // Prints system error message, releases allocated memory and exits with 
 // EXIT_FAILURE status.
 void	print_encode_strerror_and_exit(char *msg, t_encode_args *args)
-
 {
 	ft_printf("%s: %s\n", msg, strerror(errno));
 	if (args->input_pipe)

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/27 21:54:19 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/29 20:16:05 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ void	calls_to_decoding_function(t_encode_args *args)
 			if (munmap(args->input_file, args->input_file_size) < 0)
 				print_encode_strerror_and_exit("munmap", args);
 	}
+	if (args->output_to_file && args->output_fd != STDOUT_FILENO)
+		if (close(args->output_fd) < 0)
+			print_encode_strerror_and_exit("close", args);
 }
 
 void	print_encode_usage(void)
@@ -57,5 +60,7 @@ void	print_encode_strerror_and_exit(char *msg, t_encode_args *args)
 		free(args->input_pipe);
 	if (args->input_file)
 		munmap(args->input_file, args->input_file_size);
+	if (args->output_to_file && args->output_fd != STDOUT_FILENO)
+		close(args->output_fd);
 	exit(EXIT_FAILURE);
 }

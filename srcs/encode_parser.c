@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:03:15 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/28 21:39:43 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/29 20:16:22 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ static void	parse_options(int opt, t_encode_args *args)
 	{
 		args->output_to_file = true;
 		args->output_file_name = optarg;
+		args->output_fd = open(args->output_file_name, O_CREAT | O_WRONLY | \
+		O_TRUNC, 0644);
+		if (args->output_fd == -1)
+			print_encode_strerror_and_exit(args->output_file_name, args);
 	}
 }
 
@@ -106,6 +110,7 @@ void	parse_encode_arguments(int argc, char **argv, t_encode_args *args)
 {
 	int		opt;
 
+	args->output_fd = STDOUT_FILENO;
 	opt = getopt(argc, argv, "hdei:o:");
 	while (opt != -1)
 	{
@@ -116,12 +121,13 @@ void	parse_encode_arguments(int argc, char **argv, t_encode_args *args)
 		print_error_and_exit("Cannot use both -d and -e flags");
 	else if (!args->decode_mode && !args->encode_mode)
 		args->encode_mode = true;
-	parse_pipe(args);
+	if (!args->input_from_file)
+		parse_pipe(args);
 	optind++;
 	if (!argv[optind] && !args->input_pipe && !args->input_from_file)
 		read_interactive_mode(&args->input_pipe, &args->pipe_size);
 	else if (args->input_from_file)
 		parse_file_content(args, args->input_file_name);
 	if (optind < argc)
-		print_error_and_exit("Too many arguments");
+		print_encode_strerror_and_exit("Too many arguments", args);
 }

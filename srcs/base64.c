@@ -6,15 +6,15 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:53:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/28 22:54:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/29 21:01:40 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/ft_ssl.h"
 
-static void	convert_triplet(uint8_t *triplet, uint8_t scenario)
+static void	print_converted_triplet(uint8_t *triplet, int fd, uint8_t scenario)
 {
-	uint8_t		output[BASE64_OUTPUT_BLOCKS];
+	uint8_t		output[BASE64_OUTPUT_BLOCKS + 1];
 
 	output[0] = g_base64_table[triplet[0] >> 2];
 	if (scenario == 1)
@@ -35,7 +35,8 @@ static void	convert_triplet(uint8_t *triplet, uint8_t scenario)
 		output[2] = g_base64_table[(triplet[1] & 0x0F) << 2];
 		output[3] = '=';
 	}
-	ft_printf("%c%c%c%c", output[0], output[1], output[2], output[3]);
+	output[4] = '\0';
+	ft_putstr_fd((char *)output, fd);
 }
 
 static void	encode_message(t_base64_data *base64_data)
@@ -47,22 +48,22 @@ static void	encode_message(t_base64_data *base64_data)
 	while (i < (base64_data->args->message_length / BASE64_INPUT_BLOCKS) * 3)
 	{
 		ft_memcpy(triplet, base64_data->args->message + i, BASE64_INPUT_BLOCKS);
-		convert_triplet(triplet, 1);
+		print_converted_triplet(triplet, base64_data->args->output_fd, 1);
 		i += BASE64_INPUT_BLOCKS;
 		if ((i * BASE64_OUTPUT_BLOCKS / BASE64_INPUT_BLOCKS) % BASE64_LINE == 0)
-			ft_printf("\n");
+			ft_putstr_fd("\n", base64_data->args->output_fd);
 	}
 	if (base64_data->args->message_length % BASE64_INPUT_BLOCKS == 1)
 	{
 		ft_memcpy(triplet, base64_data->args->message + i, 1);
-		convert_triplet(triplet, 2);
+		print_converted_triplet(triplet, base64_data->args->output_fd, 2);
 	}
 	else if (base64_data->args->message_length % BASE64_INPUT_BLOCKS == 2)
 	{
 		ft_memcpy(triplet, base64_data->args->message + i, 2);
-		convert_triplet(triplet, 3);
+		print_converted_triplet(triplet, base64_data->args->output_fd, 3);
 	}
-	ft_printf("\n");
+	ft_putstr_fd("\n", base64_data->args->output_fd);
 }
 
 // Main function for base64 encoding/decoding.
@@ -74,4 +75,6 @@ void	base64(t_encode_args *args)
 	base64_data.args = args;
 	if (args->encode_mode)
 		encode_message(&base64_data);
+	else if (args->decode_mode)
+		printf("Decode mode\n");
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 18:27:04 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/16 11:15:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2024/12/29 19:42:51 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_encode_args
 	uint64_t	pipe_size;
 	uint64_t	message_length;
 	uint8_t		msg_origin;
+	int			output_fd;
 	bool		decode_mode;
 	bool		encode_mode;
 	bool		input_from_file;

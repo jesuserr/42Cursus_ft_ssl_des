@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/29 20:16:05 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:14:11 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,23 @@ void	print_encode_strerror_and_exit(char *msg, t_encode_args *args)
 	if (args->output_to_file && args->output_fd != STDOUT_FILENO)
 		close(args->output_fd);
 	exit(EXIT_FAILURE);
+}
+
+void	remove_message_whitespaces_and_newlines(t_encode_args *args)
+{
+	uint64_t	i;
+	uint64_t	j;
+
+	i = 0;
+	j = 0;
+	while (i < args->message_length)
+	{
+		if (args->message[i] != ' ' && args->message[i] != '\n')
+		{
+			args->message[j] = args->message[i];
+			j++;
+		}
+		i++;
+	}
+	args->message_length = j;
 }

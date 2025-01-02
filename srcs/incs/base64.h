@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:55:08 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/02 12:49:26 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:26:30 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ typedef struct s_base64_data
 	t_encode_args		*args;			// Passed as a pointer to avoid copying
 }	t_base64_data;
 
-static const uint8_t	g_base64_table[66] = \
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n";
+static const uint8_t	g_base64_table[65] = \
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 	
 static const uint8_t	g_base64_reverse_table[256] = {
 	['A'] = 0, ['B'] = 1, ['C'] = 2, ['D'] = 3, ['E'] = 4, ['F'] = 5,

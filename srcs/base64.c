@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:53:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/02 12:47:32 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:51:52 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,36 +90,28 @@ static void	decode_message(t_base64_data *base64_data)
 		if (quartet[3] != '=')
 			ft_putchar_fd((char)output[2], base64_data->args->output_fd);
 		i += BASE64_DEC_BLOCKS;
-		if (base64_data->args->message[i] == '\n')
-			i++;
 	}
 }
 
-// detect this case echo -n "SG94YQ=o" | ./ft_ssl base64 -d
 static bool	proper_encoded_message(t_base64_data *base64_data)
 {
 	uint64_t	i;
-	uint64_t	message_length_no_newlines;
 	uint64_t	message_length;
-	uint64_t	equals_count;
 
 	message_length = base64_data->args->message_length;
-	message_length_no_newlines = base64_data->args->message_length;
-	equals_count = 0;
+	if (message_length % BASE64_DEC_BLOCKS != 0)
+		return (false);
+	if (base64_data->args->message[message_length - 2] == '=' && \
+	base64_data->args->message[message_length - 1] != '=')
+		return (false);
 	i = 0;
 	while (i < message_length)
 	{
-		if (base64_data->args->message[i] == '\n')
-			message_length_no_newlines--;
-		if (base64_data->args->message[i] == '=')
-			equals_count++;
 		if (!ft_strchr((char *)g_base64_table, base64_data->args->message[i]) \
-		|| (base64_data->args->message[i] == '=' && i < message_length - 3))
+		|| (base64_data->args->message[i] == '=' && i < message_length - 2))
 			return (false);
 		i++;
 	}
-	if (message_length_no_newlines % BASE64_DEC_BLOCKS != 0 || equals_count > 2)
-		return (false);
 	return (true);
 }
 
@@ -134,6 +126,7 @@ void	base64(t_encode_args *args)
 		encode_message(&base64_data);
 	else if (args->decode_mode)
 	{
+		remove_message_whitespaces_and_newlines(args);
 		if (!proper_encoded_message(&base64_data))
 		{
 			errno = EBADMSG;

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:03:15 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/29 20:16:22 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:14:27 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ static void	parse_file_content(t_encode_args *args, char *file_name)
 		print_encode_strerror_and_exit(file_name, args);
 	if (file_stat.st_size > 0)
 	{
-		file_content = mmap(NULL, (size_t)file_stat.st_size, PROT_READ, \
-		MAP_PRIVATE, fd, 0);
+		file_content = mmap(NULL, (size_t)file_stat.st_size, \
+		PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 		if (file_content == MAP_FAILED)
 		{
 			close(fd);

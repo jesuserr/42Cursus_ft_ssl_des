@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:02 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 19:05:34 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 14:08:10 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,5 +137,8 @@ void	parse_hash_arguments(int argc, char **argv, t_hash_args *args)
 	if (optind + 1 < argc)
 		parse_file_content(args, argv[optind + 1]);
 	if (optind + 2 < argc)
-		print_error_and_exit("Too many arguments");
+	{
+		errno = E2BIG;
+		print_hash_strerror_and_exit("hash", args);
+	}
 }

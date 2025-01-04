@@ -6,12 +6,14 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:53:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/02 16:51:52 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 17:16:30 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/ft_ssl.h"
 
+// Although the encoded output is four bytes long, a fifth byte with '\0' value
+// is used in order to print the result as a string using 'ft_putstr_fd'.
 static void	print_encoded_triplet(uint8_t *triplet, int fd, uint8_t scenario)
 {
 	uint8_t		output[BASE64_DEC_BLOCKS + 1];
@@ -39,6 +41,9 @@ static void	print_encoded_triplet(uint8_t *triplet, int fd, uint8_t scenario)
 	ft_putstr_fd((char *)output, fd);
 }
 
+// Process the message in blocks of 3 characters, encoding them using the
+// 'g_base64_table' and bitwise operations. As a result, the four characters are
+// stored in the output array and printed to the output file descriptor.
 static void	encode_message(t_base64_data *base64_data)
 {
 	uint8_t		triplet[BASE64_ENC_BLOCKS];
@@ -66,6 +71,9 @@ static void	encode_message(t_base64_data *base64_data)
 	ft_putstr_fd("\n", base64_data->args->output_fd);
 }
 
+// Process the message in blocks of 4 characters, decoding them using the
+// 'g_base64_reverse_table' and bitwise operations. As a result, the three bytes
+// are stored in the output array and printed to the output file descriptor.
 static void	decode_message(t_base64_data *base64_data)
 {
 	uint8_t		quartet[BASE64_DEC_BLOCKS];
@@ -93,6 +101,11 @@ static void	decode_message(t_base64_data *base64_data)
 	}
 }
 
+// After removing whitespaces and newlines, verifies if the message is properly
+// encoded. The message must have a length multiple of 4 and if the penultimate
+// character is '=', the last character must also be '='. The message must also
+// contain only characters from 'g_base64_table' and '=' is only allowed in the
+// last two positions of the message.
 static bool	proper_encoded_message(t_base64_data *base64_data)
 {
 	uint64_t	i;

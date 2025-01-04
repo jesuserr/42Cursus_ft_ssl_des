@@ -6,12 +6,14 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/02 16:14:11 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 16:21:12 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/ft_ssl.h"
 
+// At the contrary of the hashing functions, the encoding function is just 
+// called once, since the input can only come from one source.
 void	calls_to_decoding_function(t_encode_args *args)
 {
 	if (args->input_pipe)
@@ -51,8 +53,8 @@ void	print_encode_usage(void)
 	exit(EXIT_SUCCESS);
 }
 
-// Prints system error message, releases allocated memory and exits with 
-// EXIT_FAILURE status.
+// Prints system error message, releases allocated memory and file descriptor
+// and exits with EXIT_FAILURE status.
 void	print_encode_strerror_and_exit(char *msg, t_encode_args *args)
 {
 	ft_printf("%s: %s\n", msg, strerror(errno));
@@ -65,6 +67,7 @@ void	print_encode_strerror_and_exit(char *msg, t_encode_args *args)
 	exit(EXIT_FAILURE);
 }
 
+// Removes whitespaces and newlines from the message for proper decoding.
 void	remove_message_whitespaces_and_newlines(t_encode_args *args)
 {
 	uint64_t	i;

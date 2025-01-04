@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:47:43 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 20:22:13 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 14:23:07 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,13 @@ void	print_message_from_pipe(t_hash_args *args)
 		args->message[args->pipe_size - 1] = '\0';
 	if (args->quiet_mode)
 	{
-		write (1, args->message, args->pipe_size);
+		write (STDOUT_FILENO, args->message, args->pipe_size);
 		ft_printf("\n");
 	}
 	else
 	{
 		ft_printf("(\"");
-		write (1, args->message, args->pipe_size);
+		write (STDOUT_FILENO, args->message, args->pipe_size);
 		ft_printf("\")= ");
 	}
 }

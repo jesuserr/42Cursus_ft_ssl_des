@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:03:15 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/02 17:14:27 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 16:12:07 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,12 @@ static void	parse_pipe(t_encode_args *args)
 
 // Uses 'mmap' to map the entire file into memory in one shot. Way more 
 // efficient than reading the file multiple times. File size is kept for the
-// hash functions to know how many bytes to read (specially for binary files)
+// encode functions to know how many bytes to read (specially for binary files)
 // and also for the 'munmap' function to know how many bytes to unmap when the
 // program finishes. Empty file case is handled too, otherwise 'mmap' would
-// fail.
+// fail. Since whitespaces and newlines must be removed from the decoded 
+// message, mmap is opened as PROT_READ | PROT_WRITE to allow this space of
+// memory to be modified.
 static void	parse_file_content(t_encode_args *args, char *file_name)
 {
 	int			fd;
@@ -106,6 +108,8 @@ static void	parse_file_content(t_encode_args *args, char *file_name)
 }
 
 // Parse main function.
+// Default mode is encode and default output fd is stdout. Pipe will be read
+// only if no file is provided, so only one input source is allowed.
 void	parse_encode_arguments(int argc, char **argv, t_encode_args *args)
 {
 	int		opt;
@@ -129,5 +133,8 @@ void	parse_encode_arguments(int argc, char **argv, t_encode_args *args)
 	else if (args->input_from_file)
 		parse_file_content(args, args->input_file_name);
 	if (optind < argc)
-		print_encode_strerror_and_exit("Too many arguments", args);
+	{
+		errno = E2BIG;
+		print_encode_strerror_and_exit("base64", args);
+	}
 }

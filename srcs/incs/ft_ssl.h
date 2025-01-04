@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/02 16:14:00 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 13:00:44 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void		parse_encode_arguments(int argc, char **argv, t_encode_args *args);
 void		calls_to_decoding_function(t_encode_args *args);
 void		print_encode_usage(void);
 void		print_encode_strerror_and_exit(char *msg, t_encode_args *args);
-void    	remove_message_whitespaces_and_newlines(t_encode_args *args);
+void		remove_message_whitespaces_and_newlines(t_encode_args *args);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

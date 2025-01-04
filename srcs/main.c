@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:21 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 18:19:13 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 14:12:35 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ static uint8_t	pre_parser(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	t_hash_args		args;
+	t_hash_args		hash_args;
 	t_encode_args	encode_args;
 
 	if (pre_parser(argc, argv) == HASH_COMMAND)
 	{
-		ft_bzero(&args, sizeof(t_hash_args));
-		parse_hash_arguments(argc, argv, &args);
-		calls_to_hashing_function(&args);
+		ft_bzero(&hash_args, sizeof(t_hash_args));
+		parse_hash_arguments(argc, argv, &hash_args);
+		calls_to_hashing_function(&hash_args);
 	}
 	else if (pre_parser(argc, argv) == ENCODE_COMMAND)
 	{
@@ -47,6 +47,6 @@ int	main(int argc, char **argv)
 		calls_to_decoding_function(&encode_args);
 	}
 	else
-		print_error_and_exit("Wrong Hash/Cypher command");
+		print_error_and_exit("Wrong Hash/Cipher command");
 	return (EXIT_SUCCESS);
 }

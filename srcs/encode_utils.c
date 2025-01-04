@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 16:21:12 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:17:28 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	calls_to_decoding_function(t_encode_args *args)
 {
 	if (args->input_pipe)
 	{
-		args->msg_origin = IS_PIPE;
 		args->message = args->input_pipe;
 		args->message_length = args->pipe_size;
 		base64(args);
@@ -26,7 +25,6 @@ void	calls_to_decoding_function(t_encode_args *args)
 	}
 	if (args->input_file)
 	{
-		args->msg_origin = IS_FILE;
 		args->message = args->input_file;
 		args->message_length = args->input_file_size;
 		base64(args);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:03:15 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 16:12:07 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:47:51 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ static void	parse_options(int opt, t_encode_args *args)
 	else if (opt == 'o' && !args->output_to_file)
 	{
 		args->output_to_file = true;
-		args->output_file_name = optarg;
-		args->output_fd = open(args->output_file_name, O_CREAT | O_WRONLY | \
+		args->output_fd = open(optarg, O_CREAT | O_WRONLY | \
 		O_TRUNC, 0644);
 		if (args->output_fd == -1)
-			print_encode_strerror_and_exit(args->output_file_name, args);
+			print_encode_strerror_and_exit(optarg, args);
 	}
 }
 

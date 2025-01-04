@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:53:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 17:16:30 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:12:02 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,37 +44,37 @@ static void	print_encoded_triplet(uint8_t *triplet, int fd, uint8_t scenario)
 // Process the message in blocks of 3 characters, encoding them using the
 // 'g_base64_table' and bitwise operations. As a result, the four characters are
 // stored in the output array and printed to the output file descriptor.
-static void	encode_message(t_base64_data *base64_data)
+static void	encode_message(t_encode_args *args)
 {
 	uint8_t		triplet[BASE64_ENC_BLOCKS];
 	uint64_t	i;
 
 	i = 0;
-	while (i < (base64_data->args->message_length / BASE64_ENC_BLOCKS) * 3)
+	while (i < (args->message_length / BASE64_ENC_BLOCKS) * 3)
 	{
-		ft_memcpy(triplet, base64_data->args->message + i, BASE64_ENC_BLOCKS);
-		print_encoded_triplet(triplet, base64_data->args->output_fd, 1);
+		ft_memcpy(triplet, args->message + i, BASE64_ENC_BLOCKS);
+		print_encoded_triplet(triplet, args->output_fd, 1);
 		i += BASE64_ENC_BLOCKS;
 		if ((i * BASE64_DEC_BLOCKS / BASE64_ENC_BLOCKS) % BASE64_LINE == 0)
-			ft_putstr_fd("\n", base64_data->args->output_fd);
+			ft_putstr_fd("\n", args->output_fd);
 	}
-	if (base64_data->args->message_length % BASE64_ENC_BLOCKS == 1)
+	if (args->message_length % BASE64_ENC_BLOCKS == 1)
 	{
-		ft_memcpy(triplet, base64_data->args->message + i, 1);
-		print_encoded_triplet(triplet, base64_data->args->output_fd, 2);
+		ft_memcpy(triplet, args->message + i, 1);
+		print_encoded_triplet(triplet, args->output_fd, 2);
 	}
-	else if (base64_data->args->message_length % BASE64_ENC_BLOCKS == 2)
+	else if (args->message_length % BASE64_ENC_BLOCKS == 2)
 	{
-		ft_memcpy(triplet, base64_data->args->message + i, 2);
-		print_encoded_triplet(triplet, base64_data->args->output_fd, 3);
+		ft_memcpy(triplet, args->message + i, 2);
+		print_encoded_triplet(triplet, args->output_fd, 3);
 	}
-	ft_putstr_fd("\n", base64_data->args->output_fd);
+	ft_putstr_fd("\n", args->output_fd);
 }
 
 // Process the message in blocks of 4 characters, decoding them using the
 // 'g_base64_reverse_table' and bitwise operations. As a result, the three bytes
 // are stored in the output array and printed to the output file descriptor.
-static void	decode_message(t_base64_data *base64_data)
+static void	decode_message(t_encode_args *args)
 {
 	uint8_t		quartet[BASE64_DEC_BLOCKS];
 	uint8_t		output[BASE64_ENC_BLOCKS];
@@ -82,9 +82,9 @@ static void	decode_message(t_base64_data *base64_data)
 	uint64_t	i;
 
 	i = 0;
-	while (i < (base64_data->args->message_length / BASE64_DEC_BLOCKS) * 4)
+	while (i < (args->message_length / BASE64_DEC_BLOCKS) * 4)
 	{
-		ft_memcpy(quartet, base64_data->args->message + i, BASE64_DEC_BLOCKS);
+		ft_memcpy(quartet, args->message + i, BASE64_DEC_BLOCKS);
 		reverse_table[0] = g_base64_reverse_table[quartet[0]];
 		reverse_table[1] = g_base64_reverse_table[quartet[1]];
 		reverse_table[2] = g_base64_reverse_table[quartet[2]];
@@ -92,11 +92,11 @@ static void	decode_message(t_base64_data *base64_data)
 		output[0] = (reverse_table[0] << 2) | (reverse_table[1] >> 4);
 		output[1] = (reverse_table[1] << 4) | (reverse_table[2] >> 2);
 		output[2] = (reverse_table[2] << 6) | reverse_table[3];
-		ft_putchar_fd((char)output[0], base64_data->args->output_fd);
+		ft_putchar_fd((char)output[0], args->output_fd);
 		if (quartet[2] != '=')
-			ft_putchar_fd((char)output[1], base64_data->args->output_fd);
+			ft_putchar_fd((char)output[1], args->output_fd);
 		if (quartet[3] != '=')
-			ft_putchar_fd((char)output[2], base64_data->args->output_fd);
+			ft_putchar_fd((char)output[2], args->output_fd);
 		i += BASE64_DEC_BLOCKS;
 	}
 }
@@ -106,22 +106,20 @@ static void	decode_message(t_base64_data *base64_data)
 // character is '=', the last character must also be '='. The message must also
 // contain only characters from 'g_base64_table' and '=' is only allowed in the
 // last two positions of the message.
-static bool	proper_encoded_message(t_base64_data *base64_data)
+static bool	proper_encoded_message(t_encode_args *args)
 {
 	uint64_t	i;
-	uint64_t	message_length;
 
-	message_length = base64_data->args->message_length;
-	if (message_length % BASE64_DEC_BLOCKS != 0)
+	if (args->message_length % BASE64_DEC_BLOCKS != 0)
 		return (false);
-	if (base64_data->args->message[message_length - 2] == '=' && \
-	base64_data->args->message[message_length - 1] != '=')
+	if (args->message[args->message_length - 2] == '=' && \
+	args->message[args->message_length - 1] != '=')
 		return (false);
 	i = 0;
-	while (i < message_length)
+	while (i < args->message_length)
 	{
-		if (!ft_strchr((char *)g_base64_table, base64_data->args->message[i]) \
-		|| (base64_data->args->message[i] == '=' && i < message_length - 2))
+		if (!ft_strchr((char *)g_base64_table, args->message[i]) \
+		|| (args->message[i] == '=' && i < args->message_length - 2))
 			return (false);
 		i++;
 	}
@@ -131,20 +129,16 @@ static bool	proper_encoded_message(t_base64_data *base64_data)
 // Main function for base64 encoding/decoding.
 void	base64(t_encode_args *args)
 {
-	t_base64_data	base64_data;
-
-	ft_bzero(&base64_data, sizeof(t_base64_data));
-	base64_data.args = args;
 	if (args->encode_mode)
-		encode_message(&base64_data);
+		encode_message(args);
 	else if (args->decode_mode)
 	{
 		remove_message_whitespaces_and_newlines(args);
-		if (!proper_encoded_message(&base64_data))
+		if (!proper_encoded_message(args))
 		{
 			errno = EBADMSG;
 			print_encode_strerror_and_exit("base64", args);
 		}
-		decode_message(&base64_data);
+		decode_message(args);
 	}
 }

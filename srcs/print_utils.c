@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:21:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 13:14:05 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:05:09 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,18 @@ void	print_total_usage(void)
 		"  -d          decode mode\n"
 		"  -e          encode mode (default)\n"
 		"  -i <file>   input file\n"
-		"  -o <file>   output file\n");
+		"  -o <file>   output file\n\n"
+		"Cipher options:\n"
+		"  command     des, des-ecb or des-cbc\n"
+		"  -h          print help and exit\n"
+		"  -a          decode/encode the input/output in base64\n"
+		"  -d          decrypt mode\n"
+		"  -e          encrypt mode (default)\n"
+		"  -i <file>   input file\n"
+		"  -k <key>    key in hexadecimal\n"
+		"  -o <file>   output file\n"
+		"  -p          password in ASCII\n"
+		"  -s <salt>   salt in hexadecimal\n"
+		"  -v          initialization vector in hexadecimal\n\n");
 	exit(EXIT_SUCCESS);
 }

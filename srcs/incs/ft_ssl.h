@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 13:00:44 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/26 19:41:12 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@
 # include <stdbool.h>							// for booleans
 # include "types_hash.h"						// for t_hash_args
 # include "types_encode.h"						// for t_encode_args
+# include "types_encrypt.h"						// for t_encrypt_args
 # include "md5.h"								// for MD5 hash function
 # include "sha256.h"							// for SHA256 hash function
 # include "sha224.h"							// for SHA224 hash function
 # include "sha384.h"							// for SHA384 hash function
 # include "sha512.h"							// for SHA512 hash function
 # include "base64.h"							// for base64 encode function
+# include "des.h"						    	// for DES encrypt function
 # include <string.h>							// for strerror
 # include <fcntl.h>								// for open
 # include <errno.h>								// for errno
@@ -43,6 +45,7 @@
 */
 # define HASH_COMMAND       1           // Pre-parser detected a hash command
 # define ENCODE_COMMAND     2           // Pre-parser detected an encode command
+# define ENCRYPT_COMMAND    3           // Pre-parser detected encrypt command
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -66,6 +69,14 @@ void		calls_to_decoding_function(t_encode_args *args);
 void		print_encode_usage(void);
 void		print_encode_strerror_and_exit(char *msg, t_encode_args *args);
 void		remove_message_whitespaces_and_newlines(t_encode_args *args);
+
+/********************************** encrypt_parser.c **************************/
+void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);
+
+/********************************** encrypt_utils.c ***************************/
+void		calls_to_encrypt_function(t_encrypt_args *args);
+void		print_encrypt_usage(void);
+void		print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

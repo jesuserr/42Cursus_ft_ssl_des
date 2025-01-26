@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:21 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 14:12:35 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/26 19:40:46 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ static uint8_t	pre_parser(int argc, char **argv)
 		return (HASH_COMMAND);
 	else if (!ft_strncmp(argv[1], "base64", 6) && ft_strlen(argv[1]) == 6)
 		return (ENCODE_COMMAND);
+	else if ((!ft_strncmp(argv[1], "des", 3) && ft_strlen(argv[1]) == 3) || \
+		(!ft_strncmp(argv[1], "des-ecb", 7) && ft_strlen(argv[1]) == 7) || \
+		(!ft_strncmp(argv[1], "des-cbc", 7) && ft_strlen(argv[1]) == 7))
+		return (ENCRYPT_COMMAND);
 	else if (!ft_strncmp(argv[1], "-h", 2) && ft_strlen(argv[1]) == 2)
 		print_total_usage();
 	return (0);
@@ -33,6 +37,7 @@ int	main(int argc, char **argv)
 {
 	t_hash_args		hash_args;
 	t_encode_args	encode_args;
+	t_encrypt_args	encrypt_args;
 
 	if (pre_parser(argc, argv) == HASH_COMMAND)
 	{
@@ -45,6 +50,12 @@ int	main(int argc, char **argv)
 		ft_bzero(&encode_args, sizeof(t_encode_args));
 		parse_encode_arguments(argc, argv, &encode_args);
 		calls_to_decoding_function(&encode_args);
+	}
+	else if (pre_parser(argc, argv) == ENCRYPT_COMMAND)
+	{
+		ft_bzero(&encrypt_args, sizeof(t_encrypt_args));
+		parse_encrypt_arguments(argc, argv, &encrypt_args);
+		calls_to_encrypt_function(&encrypt_args);
 	}
 	else
 		print_error_and_exit("Wrong Hash/Cipher command");

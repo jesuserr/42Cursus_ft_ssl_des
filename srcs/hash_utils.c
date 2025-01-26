@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:47:43 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 14:23:07 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/26 20:17:38 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	print_hash_usage(void)
 {
 	ft_printf("Usage\n"
 		"  ./ft_ssl <command> [flags] [file]\n\n"
-		"Options:\n"
+		"Hash options:\n"
 		"  command     md5, sha224, sha256, sha384 or sha512\n"
 		"  -h          print help and exit\n"
 		"  -p          echo STDIN to STDOUT and append the checksum to STDOUT\n"

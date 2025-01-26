@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:21:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/24 14:05:09 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/26 20:19:12 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,24 +49,20 @@ void	print_error_and_exit(char *str)
 
 void	print_total_usage(void)
 {
-	ft_printf("Usage\n"
-		"  ./ft_ssl <command> [flags] [file]\n\n"
-		"Hash options:\n"
-		"  command     md5, sha224, sha256, sha384 or sha512\n"
+	ft_printf("Usage\n  ./ft_ssl <command> [flags] [file]\n\n"
+		"Hash options:\n  command     md5, sha224, sha256, sha384 or sha512\n"
 		"  -h          print help and exit\n"
 		"  -p          echo STDIN to STDOUT and append the checksum to STDOUT\n"
 		"  -q          quiet mode\n"
 		"  -r          reverse the format of the output\n"
 		"  -s <string> print the sum of the given string\n\n"
-		"Encode options:\n"
-		"  command     base64\n"
+		"Encode options:\n  command     base64\n"
 		"  -h          print help and exit\n"
 		"  -d          decode mode\n"
 		"  -e          encode mode (default)\n"
 		"  -i <file>   input file\n"
 		"  -o <file>   output file\n\n"
-		"Cipher options:\n"
-		"  command     des, des-ecb or des-cbc\n"
+		"Cipher options:\n  command     des, des-ecb or des-cbc\n"
 		"  -h          print help and exit\n"
 		"  -a          decode/encode the input/output in base64\n"
 		"  -d          decrypt mode\n"

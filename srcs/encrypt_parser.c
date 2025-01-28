@@ -6,33 +6,46 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:15:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/26 20:04:07 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:34:49 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/ft_ssl.h"
 
+// Auxiliary function to reduce 'parse_options' function size.
+static void	set_flag_values(bool *boolean_field, char **string_field)
+{
+	*boolean_field = true;
+	*string_field = optarg;
+}
+
 static void	parse_options(int opt, t_encrypt_args *args)
 {
 	if (opt == 'h')
 		print_encrypt_usage();
+	else if (opt == 'a' && !args->base64_mode)
+		args->base64_mode = true;
 	else if (opt == 'd' && !args->decrypt_mode)
 		args->decrypt_mode = true;
 	else if (opt == 'e' && !args->encrypt_mode)
 		args->encrypt_mode = true;
 	else if (opt == 'i' && !args->input_from_file)
-	{
-		args->input_from_file = true;
-		args->input_file_name = optarg;
-	}
+		set_flag_values(&args->input_from_file, &args->input_file_name);
+	else if (opt == 'k' && !args->key_provided && str_is_hex(optarg, args))
+		set_flag_values(&args->key_provided, &args->key);
 	else if (opt == 'o' && !args->output_to_file)
 	{
 		args->output_to_file = true;
-		args->output_fd = open(optarg, O_CREAT | O_WRONLY | \
-		O_TRUNC, 0644);
+		args->output_fd = open(optarg, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (args->output_fd == -1)
 			print_encrypt_strerror_and_exit(optarg, args);
 	}
+	else if (opt == 'p' && !args->pass_provided && str_is_ascii(optarg, args))
+		set_flag_values(&args->pass_provided, &args->pass);
+	else if (opt == 's' && !args->salt_provided && str_is_hex(optarg, args))
+		set_flag_values(&args->salt_provided, &args->salt);
+	else if (opt == 'v' && !args->iv_provided && str_is_hex(optarg, args))
+		set_flag_values(&args->iv_provided, &args->iv);
 }
 
 // Function deals with both binary and text files. 'isatty' function is used to
@@ -112,11 +125,11 @@ void	parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *args)
 	int		opt;
 
 	args->output_fd = STDOUT_FILENO;
-	opt = getopt(argc, argv, "hdei:o:");
+	opt = getopt(argc, argv, "hadei:k:o:p:s:v:");
 	while (opt != -1)
 	{
 		parse_options(opt, args);
-		opt = getopt(argc, argv, "hdei:o:");
+		opt = getopt(argc, argv, "hadei:k:o:p:s:v:");
 	}
 	if (args->decrypt_mode && args->encrypt_mode)
 		print_error_and_exit("Cannot use both -d and -e flags");
@@ -129,9 +142,9 @@ void	parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *args)
 		read_interactive_mode(&args->input_pipe, &args->pipe_size);
 	else if (args->input_from_file)
 		parse_file_content(args, args->input_file_name);
+	errno = E2BIG;
 	if (optind < argc)
-	{
-		errno = E2BIG;
 		print_encrypt_strerror_and_exit("DES", args);
-	}
+	if (!args->pass)
+		read_password(args);
 }

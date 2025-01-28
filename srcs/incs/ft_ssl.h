@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/26 19:41:12 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:03:52 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # include <errno.h>								// for errno
 # include <sys/stat.h>							// for fstat
 # include <sys/mman.h>							// for mmap/munmap
+# include <bsd/readpassphrase.h>				// for readpassphrase
 # include <bits/getopt_core.h>	// Delete, just to fix intellisense vscode error
 
 /*
@@ -73,10 +74,15 @@ void		remove_message_whitespaces_and_newlines(t_encode_args *args);
 /********************************** encrypt_parser.c **************************/
 void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);
 
+/********************************** encrypt_password.c ************************/
+void		read_password(t_encrypt_args *args);
+
 /********************************** encrypt_utils.c ***************************/
 void		calls_to_encrypt_function(t_encrypt_args *args);
 void		print_encrypt_usage(void);
 void		print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args);
+bool		str_is_hex(char *str, t_encrypt_args *args);
+bool		str_is_ascii(char *str, t_encrypt_args *args);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:48:16 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/26 19:20:22 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/27 23:32:47 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@ typedef struct s_encrypt_args
 	bool		encrypt_mode;
 	bool		input_from_file;
 	bool		output_to_file;
+	bool		base64_mode;
+	bool		key_provided;
+	bool		pass_provided;
+	bool		salt_provided;
+	bool		iv_provided;
+	char		*key;
+	char		*pass;
+	char		*salt;
+	char		*iv;
 }	t_encrypt_args;
 
 #endif

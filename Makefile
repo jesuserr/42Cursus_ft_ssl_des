@@ -6,7 +6,7 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 17:09:51 by jesuserr          #+#    #+#              #
-#    Updated: 2025/01/26 19:27:30 by jesuserr         ###   ########.fr        #
+#    Updated: 2025/01/28 12:59:57 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = ft_ssl
 SRCS = main.c print_utils.c bitwise_utils.c common_utils.c \
 	   hash_parser.c hash_utils.c md5.c sha224.c sha256.c sha384.c sha512.c \
 	   encode_parser.c encode_utils.c base64.c \
-	   encrypt_parser.c encrypt_utils.c
+	   encrypt_parser.c encrypt_utils.c encrypt_password.c
 PATH_SRCS = ./srcs/
 PATH_INCS = ./srcs/incs/
 PATH_OBJS = ./objs/
@@ -28,7 +28,7 @@ DEPS = $(addprefix $(PATH_DEPS), $(SRCS:.c=.d))
 INCLUDE = -I./ -I./libft/includes/
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror -g -pedantic -Wshadow
-LDFLAGS = -lm
+LDFLAGS = -lbsd
 
 NORM = $(addprefix $(PATH_SRCS), $(SRCS)) #$(PATH_INCS)*.h
 GREEN = "\033[0;92m"

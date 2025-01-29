@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:11:03 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:31:15 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@
 # include "sha384.h"							// for SHA384 hash function
 # include "sha512.h"							// for SHA512 hash function
 # include "base64.h"							// for base64 encode function
-# include "des.h"						    	// for DES encrypt function
+# include "des_ecb.h"						    // for des-ecb encrypt function
+# include "des_cbc.h"						    // for des-cbc encrypt function
 # include <string.h>							// for strerror
 # include <fcntl.h>								// for open
 # include <errno.h>								// for errno
@@ -61,6 +62,7 @@ uint64_t	right_rotation_64(uint64_t nbr, int8_t bits);
 
 /********************************** common_utils.c ****************************/
 void		read_interactive_mode(char **input_pipe, uint64_t *pipe_size);
+void		set_flag_values(bool *boolean_field, char **string_field);
 
 /********************************** encode_parser.c ***************************/
 void		parse_encode_arguments(int argc, char **argv, t_encode_args *args);

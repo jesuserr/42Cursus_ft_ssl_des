@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:48:16 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/27 23:32:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 11:55:00 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_encrypt_args
 	char		*pass;
 	char		*salt;
 	char		*iv;
+	uint8_t		encrypt_function;
 }	t_encrypt_args;
 
 #endif

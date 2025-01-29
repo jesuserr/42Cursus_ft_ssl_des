@@ -6,23 +6,25 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:23:26 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:32:07 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:07:38 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
 
 // At the contrary of the hashing functions, the encrypt function is just 
-// called once, since the input can only come from one source.
+// called once, since the input can only come from one source. File has
+// priority over pipe, so if both are provided, the pipe will be ignored.
 void	calls_to_encrypt_function(t_encrypt_args *args)
 {
-	ft_hex_dump(args, sizeof(t_encrypt_args), 8);
+	void	(*encrpyt_functions[])(t_encrypt_args *) = {des_ecb, des_cbc};
+
 	if (args->input_pipe)
 	{
 		args->message = args->input_pipe;
 		args->message_length = args->pipe_size;
 		ft_printf("Encrypting pipe\n");
-		//base64(args);
+		encrpyt_functions[args->encrypt_function](args);
 		free(args->input_pipe);
 	}
 	if (args->input_file)
@@ -30,7 +32,7 @@ void	calls_to_encrypt_function(t_encrypt_args *args)
 		args->message = args->input_file;
 		args->message_length = args->input_file_size;
 		ft_printf("Encrypting file\n");
-		//base64(args);
+		encrpyt_functions[args->encrypt_function](args);
 		if (args->input_file_size > 0)
 			if (munmap(args->input_file, args->input_file_size) < 0)
 				print_encrypt_strerror_and_exit("munmap", args);

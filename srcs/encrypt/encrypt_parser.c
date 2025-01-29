@@ -6,18 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:15:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:31:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:20:31 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
-
-// Auxiliary function to reduce 'parse_options' function size.
-static void	set_flag_values(bool *boolean_field, char **string_field)
-{
-	*boolean_field = true;
-	*string_field = optarg;
-}
 
 static void	parse_options(int opt, t_encrypt_args *args)
 {
@@ -117,6 +110,19 @@ static void	parse_file_content(t_encrypt_args *args, char *file_name)
 	args->input_file_name = file_name;
 }
 
+// Parses the encrypt function and stores it in 'args->encrypt_function' to be
+// called later by the function pointer array. No need of final 'else' since
+// the pre-parser in main function already checks for valid function names.
+static void	parse_encrypt_function(t_encrypt_args *args, char *function)
+{
+	if (!ft_strncmp(function, "des", 3) && ft_strlen(function) == 3)
+		args->encrypt_function = 0;
+	else if (!ft_strncmp(function, "des-ecb", 7) && ft_strlen(function) == 7)
+		args->encrypt_function = 0;
+	else if (!ft_strncmp(function, "des-cbc", 7) && ft_strlen(function) == 7)
+		args->encrypt_function = 1;
+}
+
 // Parse main function.
 // Default mode is encrypt and default output fd is stdout. Pipe will be read
 // only if no file is provided, so only one input source is allowed.
@@ -131,6 +137,7 @@ void	parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *args)
 		parse_options(opt, args);
 		opt = getopt(argc, argv, "hadei:k:o:p:s:v:");
 	}
+	parse_encrypt_function(args, argv[optind]);
 	if (args->decrypt_mode && args->encrypt_mode)
 		print_error_and_exit("Cannot use both -d and -e flags");
 	else if (!args->decrypt_mode && !args->encrypt_mode)

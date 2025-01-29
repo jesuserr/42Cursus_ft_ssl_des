@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:58:37 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:34:34 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 12:29:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,11 @@ void	read_interactive_mode(char **input_pipe, uint64_t *pipe_size)
 	}
 	*pipe_size = ft_strlen(*input_pipe);
 	free(input);
+}
+
+// Auxiliary function to reduce 'parse_options' function size.
+void	set_flag_values(bool *boolean_field, char **string_field)
+{
+	*boolean_field = true;
+	*string_field = optarg;
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:15:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/28 13:34:49 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:08:00 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,16 +135,15 @@ void	parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *args)
 		print_error_and_exit("Cannot use both -d and -e flags");
 	else if (!args->decrypt_mode && !args->encrypt_mode)
 		args->encrypt_mode = true;
+	errno = E2BIG;
+	if (++optind < argc)
+		print_encrypt_strerror_and_exit("DES", args);
+	if (!args->key_provided && !args->pass_provided)
+		read_password_from_console(args);
 	if (!args->input_from_file)
 		parse_pipe(args);
-	optind++;
 	if (!argv[optind] && !args->input_pipe && !args->input_from_file)
 		read_interactive_mode(&args->input_pipe, &args->pipe_size);
 	else if (args->input_from_file)
 		parse_file_content(args, args->input_file_name);
-	errno = E2BIG;
-	if (optind < argc)
-		print_encrypt_strerror_and_exit("DES", args);
-	if (!args->pass)
-		read_password(args);
 }

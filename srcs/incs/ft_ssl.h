@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/28 12:03:52 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:11:03 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void		remove_message_whitespaces_and_newlines(t_encode_args *args);
 void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);
 
 /********************************** encrypt_password.c ************************/
-void		read_password(t_encrypt_args *args);
+void		read_password_from_console(t_encrypt_args *args);
 
 /********************************** encrypt_utils.c ***************************/
 void		calls_to_encrypt_function(t_encrypt_args *args);

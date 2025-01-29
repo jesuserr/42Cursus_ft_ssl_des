@@ -6,14 +6,14 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:57:42 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/28 12:45:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:10:59 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "incs/ft_ssl.h"
 
 // Read and verify password from user and store it in 'args->pass'.
-void	read_password(t_encrypt_args *args)
+void	read_password_from_console(t_encrypt_args *args)
 {
 	char	buffer[1024];
 
@@ -24,9 +24,10 @@ void	read_password(t_encrypt_args *args)
 	if (readpassphrase("Verifying - enter encryption password:", buffer, \
 	sizeof(buffer), RPP_ECHO_OFF) == NULL)
 		print_encrypt_strerror_and_exit("readpassphrase", args);
-	if (ft_strncmp(args->pass, buffer, ft_strlen(args->pass)) != 0)
+	if (ft_strlen(args->pass) != ft_strlen(buffer) || \
+	(ft_strncmp(args->pass, buffer, ft_strlen(args->pass)) != 0))
 	{
-		ft_printf("Passwords don't match\n");
+		ft_printf("Verification error\n");
 		errno = EINVAL;
 		print_encrypt_strerror_and_exit("DES", args);
 	}

@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:47:43 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/26 20:17:38 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:24:03 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // Uses an array of function pointers to call the hashing function selected by
 // the user. Performs up to three calls to the hashing function, one for each

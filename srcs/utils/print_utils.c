@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:21:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/26 20:19:12 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:34:36 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // Prints given array of bytes in hexadecimal format. Depending on the 'start'
 // and 'end' values, it prints the array in ascending or descending order to

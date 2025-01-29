@@ -6,17 +6,20 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 17:09:51 by jesuserr          #+#    #+#              #
-#    Updated: 2025/01/28 12:59:57 by jesuserr         ###   ########.fr        #
+#    Updated: 2025/01/29 10:36:06 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 LIBFT_DIR = libft/
 
 NAME = ft_ssl
-SRCS = main.c print_utils.c bitwise_utils.c common_utils.c \
-	   hash_parser.c hash_utils.c md5.c sha224.c sha256.c sha384.c sha512.c \
-	   encode_parser.c encode_utils.c base64.c \
-	   encrypt_parser.c encrypt_utils.c encrypt_password.c
+SRCS = 	main.c \
+		utils/print_utils.c utils/bitwise_utils.c utils/common_utils.c \
+	   	hash/hash_parser.c hash/hash_utils.c hash/md5.c hash/sha224.c \
+		hash/sha256.c hash/sha384.c hash/sha512.c \
+	   	encode/encode_parser.c encode/encode_utils.c encode/base64.c \
+	   	encrypt/encrypt_parser.c encrypt/encrypt_utils.c \
+		encrypt/encrypt_password.c
 PATH_SRCS = ./srcs/
 PATH_INCS = ./srcs/incs/
 PATH_OBJS = ./objs/
@@ -44,6 +47,10 @@ makelibft:
 
 $(PATH_OBJS)%.o: $(PATH_SRCS)%.c Makefile
 	@mkdir -p $(PATH_OBJS)
+	@mkdir -p $(PATH_OBJS)/hash
+	@mkdir -p $(PATH_OBJS)/encode
+	@mkdir -p $(PATH_OBJS)/encrypt
+	@mkdir -p $(PATH_OBJS)/utils
 	$(CC) $(CFLAGS) -MMD $(INCLUDE) -c $< -o $@
 
 $(NAME): $(OBJS) $(LIBFT_DIR)libft.a

@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 10:40:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/09 16:05:21 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:34:31 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // Rotate 32-bit number to the right by given number of bits (circular shift)
 uint32_t	right_rotation(uint32_t nbr, uint8_t bits)

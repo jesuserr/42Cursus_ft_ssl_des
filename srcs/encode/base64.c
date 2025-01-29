@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:53:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 18:12:02 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:30:30 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // Although the encoded output is four bytes long, a fifth byte with '\0' value
 // is used in order to print the result as a string using 'ft_putstr_fd'.

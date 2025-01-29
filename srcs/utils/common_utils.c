@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:58:37 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 17:08:32 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:34:34 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // Reads from standard input and stores the string in the 'args->input_pipe'.
 // Uses 'gnl_strjoin' to concatenate the input lines and using the flag 'erase'

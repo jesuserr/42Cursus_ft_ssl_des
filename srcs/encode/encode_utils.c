@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 18:17:28 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:30:38 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // At the contrary of the hashing functions, the encoding function is just 
 // called once, since the input can only come from one source.

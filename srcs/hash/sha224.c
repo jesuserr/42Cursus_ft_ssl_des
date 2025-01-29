@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sha256.c                                           :+:      :+:    :+:   */
+/*   sha224.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 19:00:42 by jesuserr          #+#    #+#             */
-/*   Updated: 2024/12/15 19:36:26 by jesuserr         ###   ########.fr       */
+/*   Created: 2024/12/03 14:33:08 by jesuserr          #+#    #+#             */
+/*   Updated: 2025/01/29 10:24:10 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // Given a certain message, it is padded to a multiple of 512 bits and filled in
-// accordance with the SHA256 algorithm. Length of the message is stored as a 
+// accordance with the SHA224 algorithm. Length of the message is stored as a 
 // 64-bit integer in big-endian format. Initial values of the digest are set.
-static void	create_padded_message(t_sha256_data *ssl_data)
+static void	create_padded_message(t_sha224_data *ssl_data)
 {
 	uint64_t	len;
 	uint64_t	len_bits;
@@ -27,10 +27,10 @@ static void	create_padded_message(t_sha256_data *ssl_data)
 	else
 		len = ft_strlen(ssl_data->args->message);
 	ssl_data->msg_len = len;
-	if (len % SHA256_BLOCK < SHA256_BLOCK - 8 && len % SHA256_BLOCK != 0)
-		len = (len + SHA256_BLOCK - 1) & ~(SHA256_BLOCK - 1);
+	if (len % SHA224_BLOCK < SHA224_BLOCK - 8 && len % SHA224_BLOCK != 0)
+		len = (len + SHA224_BLOCK - 1) & ~(SHA224_BLOCK - 1);
 	else
-		len = ((len + SHA256_BLOCK - 1) & ~(SHA256_BLOCK - 1)) + SHA256_BLOCK;
+		len = ((len + SHA224_BLOCK - 1) & ~(SHA224_BLOCK - 1)) + SHA224_BLOCK;
 	ssl_data->pad_len = len;
 	ssl_data->pad_msg = ft_calloc(ssl_data->pad_len, sizeof(uint8_t));
 	if (!ssl_data->pad_msg)
@@ -40,13 +40,13 @@ static void	create_padded_message(t_sha256_data *ssl_data)
 	len_bits = ssl_data->msg_len * 8;
 	modify_endianness_64_bits(&len_bits);
 	ft_memcpy(ssl_data->pad_msg + ssl_data->pad_len - 8, &len_bits, 8);
-	ft_memcpy(ssl_data->digest, g_sha256_inits, 32);
+	ft_memcpy(ssl_data->digest, g_sha224_inits, 32);
 }
 
 // Create message schedule for the current block of the message.
 // 'w' used as a kind of alias for 'schedule' to make the code more readable.
 // 'j' is the current block number.
-static void	create_message_schedule(t_sha256_data *ssl_data, uint64_t j)
+static void	create_message_schedule(t_sha224_data *ssl_data, uint64_t j)
 {
 	uint8_t		i;
 	uint32_t	*w;
@@ -74,7 +74,7 @@ static void	create_message_schedule(t_sha256_data *ssl_data, uint64_t j)
 // Compression function for the current block of the message.
 // 'state' used as a kind of alias for 'ssl_data->state' to make the code more
 // readable. 'i' is the current round number (0-63).
-static void	compression_function(t_sha256_data *ssl_data, uint8_t i)
+static void	compression_function(t_sha224_data *ssl_data, uint8_t i)
 {
 	uint32_t	tmp1;
 	uint32_t	tmp2;
@@ -84,7 +84,7 @@ static void	compression_function(t_sha256_data *ssl_data, uint8_t i)
 	ssl_data->s1 = right_rotation(state[E], 6) ^ right_rotation(state[E], 11) \
 	^ right_rotation(state[E], 25);
 	ssl_data->ch = (state[E] & state[F]) ^ ((~state[E]) & state[G]);
-	tmp1 = state[H] + ssl_data->s1 + ssl_data->ch + g_sha256_roots_add[i] + \
+	tmp1 = state[H] + ssl_data->s1 + ssl_data->ch + g_sha224_roots_add[i] + \
 	ssl_data->schedule[i];
 	ssl_data->s0 = right_rotation(state[A], 2) ^ right_rotation(state[A], 13) \
 	^ right_rotation(state[A], 22);
@@ -104,7 +104,8 @@ static void	compression_function(t_sha256_data *ssl_data, uint8_t i)
 // Print the digest in hexadecimal format in accordance with the combination of
 // flags provided in the arguments. Although arguments are already inside 
 // ssl_data, they are passed as a parameter to make the function more readable.
-static void	print_sha256_digest(t_sha256_data *ssl_data, t_hash_args *args)
+// 'ssl_data.digest[H]' is omitted because is not part of the SHA224 digest.
+static void	print_sha224_digest(t_sha224_data *ssl_data, t_hash_args *args)
 {
 	uint8_t	i;
 
@@ -115,13 +116,13 @@ static void	print_sha256_digest(t_sha256_data *ssl_data, t_hash_args *args)
 	{
 		if (args->echo_stdin && args->msg_origin == IS_PIPE)
 			print_message_from_pipe(args);
-		while (i < SHA256_OUTPUT_SIZE / SHA256_WORD_SIZE)
+		while (i < SHA224_OUTPUT_SIZE / SHA224_WORD_SIZE)
 			print_hex_bytes((uint8_t *)&(ssl_data->digest[i++]), 3, 0);
 		ft_printf("\n");
 		return ;
 	}
-	print_prehash_output("SHA256", args);
-	while (i < SHA256_OUTPUT_SIZE / SHA256_WORD_SIZE)
+	print_prehash_output("SHA224", args);
+	while (i < SHA224_OUTPUT_SIZE / SHA224_WORD_SIZE)
 		print_hex_bytes((uint8_t *)&(ssl_data->digest[i++]), 3, 0);
 	if (args->reverse_output && args->msg_origin == IS_STRING)
 		ft_printf(" \"%s\"", args->message);
@@ -130,22 +131,22 @@ static void	print_sha256_digest(t_sha256_data *ssl_data, t_hash_args *args)
 	ft_printf("\n");
 }
 
-// Main function to calculate the SHA256 digest.
-void	sha256_sum(t_hash_args *args)
+// Main function to calculate the SHA224 digest.
+void	sha224_sum(t_hash_args *args)
 {
-	t_sha256_data	ssl_data;
+	t_sha224_data	ssl_data;
 	uint8_t			i;
 	uint64_t		j;
 
-	ft_bzero(&ssl_data, sizeof(t_sha256_data));
+	ft_bzero(&ssl_data, sizeof(t_sha224_data));
 	ssl_data.args = args;
 	create_padded_message(&ssl_data);
 	j = 0;
-	while (j < ssl_data.pad_len / SHA256_BLOCK)
+	while (j < ssl_data.pad_len / SHA224_BLOCK)
 	{
 		create_message_schedule(&ssl_data, j++);
 		i = 0;
-		while (i < SHA256_BLOCK)
+		while (i < SHA224_BLOCK)
 			compression_function(&ssl_data, i++);
 		ssl_data.digest[A] += ssl_data.state[A];
 		ssl_data.digest[B] += ssl_data.state[B];
@@ -156,6 +157,6 @@ void	sha256_sum(t_hash_args *args)
 		ssl_data.digest[G] += ssl_data.state[G];
 		ssl_data.digest[H] += ssl_data.state[H];
 	}
-	print_sha256_digest(&ssl_data, args);
+	print_sha224_digest(&ssl_data, args);
 	free(ssl_data.pad_msg);
 }

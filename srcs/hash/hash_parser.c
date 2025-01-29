@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:02 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 14:08:10 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:23:55 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 static void	parse_options(int opt, t_hash_args *args)
 {

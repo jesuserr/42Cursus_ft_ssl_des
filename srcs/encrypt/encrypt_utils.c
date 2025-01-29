@@ -6,11 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:23:26 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/28 13:40:14 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:32:07 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "incs/ft_ssl.h"
+#include "../incs/ft_ssl.h"
 
 // At the contrary of the hashing functions, the encrypt function is just 
 // called once, since the input can only come from one source.

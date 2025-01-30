@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:15:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 12:20:31 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/30 10:40:43 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,13 +138,13 @@ void	parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *args)
 		opt = getopt(argc, argv, "hadei:k:o:p:s:v:");
 	}
 	parse_encrypt_function(args, argv[optind]);
+	errno = EINVAL;
 	if (args->decrypt_mode && args->encrypt_mode)
-		print_error_and_exit("Cannot use both -d and -e flags");
+		print_encrypt_strerror_and_exit("Cannot use both -d and -e flag", args);
 	else if (!args->decrypt_mode && !args->encrypt_mode)
 		args->encrypt_mode = true;
-	errno = E2BIG;
 	if (++optind < argc)
-		print_encrypt_strerror_and_exit("DES", args);
+		print_encrypt_strerror_and_exit("Not recognized option", args);
 	if (!args->key_provided && !args->pass_provided)
 		read_password_from_console(args);
 	if (!args->input_from_file)

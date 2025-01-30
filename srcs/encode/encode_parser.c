@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:03:15 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:30:35 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:00:02 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,20 +120,17 @@ void	parse_encode_arguments(int argc, char **argv, t_encode_args *args)
 		parse_options(opt, args);
 		opt = getopt(argc, argv, "hdei:o:");
 	}
+	errno = EINVAL;
 	if (args->decode_mode && args->encode_mode)
-		print_error_and_exit("Cannot use both -d and -e flags");
+		print_encode_strerror_and_exit("Cannot use both -d and -e flags", args);
 	else if (!args->decode_mode && !args->encode_mode)
 		args->encode_mode = true;
+	if (++optind < argc)
+		print_encode_strerror_and_exit("Not recognized option", args);
 	if (!args->input_from_file)
 		parse_pipe(args);
-	optind++;
 	if (!argv[optind] && !args->input_pipe && !args->input_from_file)
 		read_interactive_mode(&args->input_pipe, &args->pipe_size);
 	else if (args->input_from_file)
 		parse_file_content(args, args->input_file_name);
-	if (optind < argc)
-	{
-		errno = E2BIG;
-		print_encode_strerror_and_exit("base64", args);
-	}
 }

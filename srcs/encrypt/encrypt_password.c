@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:57:42 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:32:02 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:19:15 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ void	read_password_from_console(t_encrypt_args *args)
 	if (ft_strlen(args->pass) != ft_strlen(buffer) || \
 	(ft_strncmp(args->pass, buffer, ft_strlen(args->pass)) != 0))
 	{
-		ft_printf("Verification error\n");
 		errno = EINVAL;
-		print_encrypt_strerror_and_exit("DES", args);
+		print_encrypt_strerror_and_exit("Password verification error", args);
 	}
 }

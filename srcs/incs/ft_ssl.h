@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 12:31:15 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/01 13:29:26 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # include <sys/stat.h>							// for fstat
 # include <sys/mman.h>							// for mmap/munmap
 # include <bsd/readpassphrase.h>				// for readpassphrase
+# include <openssl/evp.h>                       // for PKCS5_PBKDF2_HMAC remove
 # include <bits/getopt_core.h>	// Delete, just to fix intellisense vscode error
 
 /*
@@ -79,12 +80,18 @@ void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);
 /********************************** encrypt_password.c ************************/
 void		read_password_from_console(t_encrypt_args *args);
 
+/********************************** encrypt_pbkdf2.c **************************/
+void		generate_derived_key(t_encrypt_args *args);
+
+/********************************** encrypt_str_utils.c ***********************/
+bool		str_is_hex(char *str, t_encrypt_args *args);
+bool		str_is_ascii(char *str, t_encrypt_args *args);
+void		convert_str_to_hex(const char *str, uint8_t *hex);
+
 /********************************** encrypt_utils.c ***************************/
 void		calls_to_encrypt_function(t_encrypt_args *args);
 void		print_encrypt_usage(void);
 void		print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args);
-bool		str_is_hex(char *str, t_encrypt_args *args);
-bool		str_is_ascii(char *str, t_encrypt_args *args);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

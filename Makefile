@@ -6,7 +6,7 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 17:09:51 by jesuserr          #+#    #+#              #
-#    Updated: 2025/01/29 12:30:02 by jesuserr         ###   ########.fr        #
+#    Updated: 2025/02/01 13:28:25 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ SRCS = 	main.c \
 		hash/sha256.c hash/sha384.c hash/sha512.c \
 	   	encode/encode_parser.c encode/encode_utils.c encode/base64.c \
 	   	encrypt/encrypt_parser.c encrypt/encrypt_utils.c encrypt/des_ecb.c \
-		encrypt/encrypt_password.c encrypt/des_cbc.c
+		encrypt/encrypt_password.c encrypt/des_cbc.c encrypt/encrypt_pbkdf2.c \
+		encrypt/encrypt_str_utils.c
 PATH_SRCS = ./srcs/
 PATH_INCS = ./srcs/incs/
 PATH_OBJS = ./objs/
@@ -31,7 +32,7 @@ DEPS = $(addprefix $(PATH_DEPS), $(SRCS:.c=.d))
 INCLUDE = -I./ -I./libft/includes/
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror -g -pedantic -Wshadow
-LDFLAGS = -lbsd
+LDFLAGS = -lbsd -lcrypto
 
 NORM = $(addprefix $(PATH_SRCS), $(SRCS)) #$(PATH_INCS)*.h
 GREEN = "\033[0;92m"

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:23:26 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 12:07:38 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/01 13:27:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,36 +77,4 @@ void	print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args)
 	if (!args->pass_provided && args->pass)
 		free(args->pass);
 	exit(EXIT_FAILURE);
-}
-
-// Returns true if the string is a valid hexadecimal string.
-bool	str_is_hex(char *str, t_encrypt_args *args)
-{
-	while (*str)
-	{
-		if (!ft_isdigit(*str) && !ft_strchr("abcdefABCDEF", *str))
-		{
-			if (args->output_to_file && args->output_fd != STDOUT_FILENO)
-				close(args->output_fd);
-			print_error_and_exit("Invalid hexadecimal string");
-		}
-		str++;
-	}
-	return (true);
-}
-
-// Returns true if the string is a valid printable ascii string.
-bool	str_is_ascii(char *str, t_encrypt_args *args)
-{
-	while (*str)
-	{
-		if (!ft_isprint(*str))
-		{
-			if (args->output_to_file && args->output_fd != STDOUT_FILENO)
-				close(args->output_fd);
-			print_error_and_exit("Invalid ascii string");
-		}
-		str++;
-	}
-	return (true);
 }

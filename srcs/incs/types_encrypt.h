@@ -6,12 +6,19 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:48:16 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 11:55:00 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/01 13:54:00 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TYPES_ENCRYPT_H
 # define TYPES_ENCRYPT_H
+
+/*
+** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
+**                              DEFINES
+*/
+# define ITERATIONS 10000U			// Number of iterations for PBKDF2
+# define KEY_LENGTH	8U				// DES Key length in bytes (64 bits)
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -41,6 +48,9 @@ typedef struct s_encrypt_args
 	char		*salt;
 	char		*iv;
 	uint8_t		encrypt_function;
+	uint8_t		hex_key[KEY_LENGTH];
+	uint8_t		hex_iv[KEY_LENGTH];
+	uint8_t		hex_salt[KEY_LENGTH];
 }	t_encrypt_args;
 
 #endif

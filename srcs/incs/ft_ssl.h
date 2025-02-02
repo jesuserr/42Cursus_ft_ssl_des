@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/01 13:29:26 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/02 19:27:16 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@
 # include <sys/stat.h>							// for fstat
 # include <sys/mman.h>							// for mmap/munmap
 # include <bsd/readpassphrase.h>				// for readpassphrase
-# include <openssl/evp.h>                       // for PKCS5_PBKDF2_HMAC remove
+# include <openssl/evp.h>		// for PKCS5_PBKDF2_HMAC remove
+# include <openssl/provider.h>	//for OSSL_PROVIDER_load remove
 # include <bits/getopt_core.h>	// Delete, just to fix intellisense vscode error
 
 /*

@@ -6,14 +6,26 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:18:14 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/02 13:10:09 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/02 19:25:57 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
-#include <openssl/provider.h>
-//for OSSL_PROVIDER_load remove
 
+static void	encode_encrypted_message(t_encrypt_args *args, \
+unsigned char *ciphertext, int ciphertext_len)
+{
+	t_encode_args	encode_args;
+
+	encode_args.message = (char *)ciphertext;
+	encode_args.message_length = ciphertext_len;
+	encode_args.encode_mode = true;
+	encode_args.output_fd = args->output_fd;
+	base64(&encode_args);
+}
+
+// Cyphered text is limited to 4096 bytes. Should be dynamically allocated
+// and freed.
 void	des_ecb_encrypt(t_encrypt_args *args)
 {
 	EVP_CIPHER_CTX	*ctx;
@@ -34,8 +46,11 @@ void	des_ecb_encrypt(t_encrypt_args *args)
 	EVP_CIPHER_CTX_free(ctx);
 	EVP_cleanup();
 	OSSL_PROVIDER_unload(legacy_provider);
-	for (int i = 0; i < ciphertext_len; i++)
-		ft_putchar_fd(ciphertext[i], args->output_fd);
+	if (args->base64_mode)
+		encode_encrypted_message(args, ciphertext, ciphertext_len);
+	else
+		for (int i = 0; i < ciphertext_len; i++)
+			ft_putchar_fd(ciphertext[i], args->output_fd);
 }
 
 void	des_ecb_decrypt(t_encrypt_args *args)

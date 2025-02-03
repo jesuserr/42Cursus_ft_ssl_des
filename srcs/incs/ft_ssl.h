@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/02 19:27:16 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/03 10:59:53 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void		convert_str_to_hex(const char *str, uint8_t *hex);
 void		calls_to_encrypt_function(t_encrypt_args *args);
 void		print_encrypt_usage(void);
 void		print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args);
+void		decode_base64_message(t_encode_args *args, char *msg, char *copy);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

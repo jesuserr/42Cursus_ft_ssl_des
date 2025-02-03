@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:03:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/01 14:21:23 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/02 19:47:16 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static void	derive_key_pbkdf2(const char *password, const unsigned char *salt, \
 
 void	generate_derived_key(t_encrypt_args *args)
 {
-	ft_printf("Generating key\n");
-	ft_printf("Password: %s\n", args->pass);
-	ft_printf("Salt: %s\n", args->salt);
+	//ft_printf("Generating key\n");
+	//ft_printf("Password: %s\n", args->pass);
+	//ft_printf("Salt: %s\n", args->salt);
 	if (args->salt_provided)
 	{
 		convert_str_to_hex(args->salt, args->hex_salt);
@@ -34,10 +34,10 @@ void	generate_derived_key(t_encrypt_args *args)
 	else
 		derive_key_pbkdf2(args->pass, NULL, 0, ITERATIONS, KEY_LENGTH, \
 		args->hex_key);
-	ft_printf("Hex salt: ");
-	print_hex_bytes(args->hex_salt, 0, KEY_LENGTH - 1);
-	ft_printf("\nDerived Key: ");
-	print_hex_bytes(args->hex_key, 0, KEY_LENGTH - 1);
-	ft_printf("\n");
-	ft_hex_dump(&args->hex_salt, KEY_LENGTH, 8);
+	//ft_printf("Hex salt: ");
+	//print_hex_bytes(args->hex_salt, 0, KEY_LENGTH - 1);
+	//ft_printf("\nDerived Key: ");
+	//print_hex_bytes(args->hex_key, 0, KEY_LENGTH - 1);
+	//ft_printf("\n");
+	//ft_hex_dump(&args->hex_salt, KEY_LENGTH, 8);
 }

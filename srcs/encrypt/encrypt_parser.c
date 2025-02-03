@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:15:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/30 10:40:43 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/03 10:40:04 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ static void	parse_pipe(t_encrypt_args *args)
 // encrypt functions to know how many bytes to read (specially for binary files)
 // and also for the 'munmap' function to know how many bytes to unmap when the
 // program finishes. Empty file case is handled too, otherwise 'mmap' would
-// fail.
+// fail. Since whitespaces and newlines must be removed from the decoded 
+// message (when flag -a is used), mmap is opened as PROT_READ | PROT_WRITE to
+// allow this space of memory to be modified.
 static void	parse_file_content(t_encrypt_args *args, char *file_name)
 {
 	int			fd;
@@ -94,8 +96,8 @@ static void	parse_file_content(t_encrypt_args *args, char *file_name)
 		print_encrypt_strerror_and_exit(file_name, args);
 	if (file_stat.st_size > 0)
 	{
-		file_content = mmap(NULL, (size_t)file_stat.st_size, PROT_READ, \
-		MAP_PRIVATE, fd, 0);
+		file_content = mmap(NULL, (size_t)file_stat.st_size, \
+		PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 		if (file_content == MAP_FAILED)
 		{
 			close(fd);

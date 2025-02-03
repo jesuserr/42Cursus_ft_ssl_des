@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:55:08 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/04 18:49:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/02 21:38:51 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,7 @@ static const uint8_t	g_base64_reverse_table[256] = {
 **                        FUNCTION PROTOTYPES
 */
 void	base64(t_encode_args *args);
+bool	proper_encoded_message(t_encode_args *args);
+void	encode_message(t_encode_args *args);
 
 #endif

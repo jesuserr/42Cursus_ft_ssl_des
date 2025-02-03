@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:53:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:30:30 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/02 21:38:17 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	print_encoded_triplet(uint8_t *triplet, int fd, uint8_t scenario)
 // Process the message in blocks of 3 characters, encoding them using the
 // 'g_base64_table' and bitwise operations. As a result, the four characters are
 // stored in the output array and printed to the output file descriptor.
-static void	encode_message(t_encode_args *args)
+void	encode_message(t_encode_args *args)
 {
 	uint8_t		triplet[BASE64_ENC_BLOCKS];
 	uint64_t	i;
@@ -106,7 +106,7 @@ static void	decode_message(t_encode_args *args)
 // character is '=', the last character must also be '='. The message must also
 // contain only characters from 'g_base64_table' and '=' is only allowed in the
 // last two positions of the message.
-static bool	proper_encoded_message(t_encode_args *args)
+bool	proper_encoded_message(t_encode_args *args)
 {
 	uint64_t	i;
 

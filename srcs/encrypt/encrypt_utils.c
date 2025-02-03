@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:23:26 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/03 11:00:37 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/03 14:24:44 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,35 +75,4 @@ void	print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args)
 	if (!args->pass_provided && args->pass)
 		free(args->pass);
 	exit(EXIT_FAILURE);
-}
-
-// Similar to 'decode_message()' in base64.c, except that in this case the 
-// output is not sent to the file descriptor, but stored in args->message in
-// order to be decrypted later (args->message_length is updated).
-void	decode_base64_message(t_encode_args *args, char *msg, char *copy)
-{
-	uint8_t		quartet[BASE64_DEC_BLOCKS];
-	uint8_t		output[BASE64_ENC_BLOCKS];
-	uint8_t		reverse_table[4];
-	uint64_t	i;
-
-	i = 0;
-	while (i < (args->message_length / BASE64_DEC_BLOCKS) * 4)
-	{
-		ft_memcpy(quartet, args->message + i, BASE64_DEC_BLOCKS);
-		reverse_table[0] = g_base64_reverse_table[quartet[0]];
-		reverse_table[1] = g_base64_reverse_table[quartet[1]];
-		reverse_table[2] = g_base64_reverse_table[quartet[2]];
-		reverse_table[3] = g_base64_reverse_table[quartet[3]];
-		output[0] = (reverse_table[0] << 2) | (reverse_table[1] >> 4);
-		output[1] = (reverse_table[1] << 4) | (reverse_table[2] >> 2);
-		output[2] = (reverse_table[2] << 6) | reverse_table[3];
-		*msg++ = (char)output[0];
-		if (quartet[2] != '=')
-			*msg++ = (char)output[1];
-		if (quartet[3] != '=')
-			*msg++ = (char)output[2];
-		i += BASE64_DEC_BLOCKS;
-	}
-	args->message_length = msg - copy;
 }

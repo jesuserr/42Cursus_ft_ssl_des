@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/03 10:59:53 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/03 13:00:00 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,12 @@ void		set_flag_values(bool *boolean_field, char **string_field);
 /********************************** encode_parser.c ***************************/
 void		parse_encode_arguments(int argc, char **argv, t_encode_args *args);
 
+/********************************** encrypt_encode_utils.c ********************/
+void		decode_base64_message(t_encode_args *args, char *msg, char *copy);
+void		encode_encrypted_message(t_encrypt_args *args, \
+			unsigned char *ciphertext, int ciphertext_len);
+void		decode_encrypted_message(t_encrypt_args *args);
+
 /********************************** encode_utils.c ****************************/
 void		calls_to_decoding_function(t_encode_args *args);
 void		print_encode_usage(void);
@@ -93,7 +99,6 @@ void		convert_str_to_hex(const char *str, uint8_t *hex);
 void		calls_to_encrypt_function(t_encrypt_args *args);
 void		print_encrypt_usage(void);
 void		print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args);
-void		decode_base64_message(t_encode_args *args, char *msg, char *copy);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

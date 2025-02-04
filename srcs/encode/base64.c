@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 17:53:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/02 21:38:17 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/04 10:56:54 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	encode_message(t_encode_args *args)
 		ft_memcpy(triplet, args->message + i, 2);
 		print_encoded_triplet(triplet, args->output_fd, 3);
 	}
-	ft_putstr_fd("\n", args->output_fd);
+	//ft_putstr_fd("\n", args->output_fd);
 }
 
 // Process the message in blocks of 4 characters, decoding them using the

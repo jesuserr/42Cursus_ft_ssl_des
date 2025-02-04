@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:25:55 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/01 14:01:54 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:10:50 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,14 @@ bool	str_is_hex(char *str, t_encrypt_args *args)
 	}
 	if (ft_strlen(copy) < 16)
 	{
-		ft_printf("Warning: hex string shorter than 64 bits, padding with");
-		ft_printf(" zeros\n");
+		ft_putstr_fd("Warning: hex string shorter than 64 bits", STDERR_FILENO);
+		ft_putstr_fd(", padding with zeros\n", STDERR_FILENO);
 	}
 	else if (ft_strlen(copy) > 16)
-		ft_printf("Warning: hex string longer than 64 bits, ignoring excess\n");
+	{
+		ft_putstr_fd("Warning: hex string longer than 64 bits", STDERR_FILENO);
+		ft_putstr_fd(", ignoring excess\n", STDERR_FILENO);
+	}
 	return (true);
 }
 

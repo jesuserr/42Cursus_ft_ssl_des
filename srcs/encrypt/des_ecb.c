@@ -6,14 +6,14 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:18:14 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/03 12:34:37 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/04 20:14:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
 
 // Cyphered text is limited to 4096 bytes. Should be dynamically allocated
-// and freed.
+// and freed. Size changes depending on salt too.
 void	des_ecb_encrypt(t_encrypt_args *args)
 {
 	EVP_CIPHER_CTX	*ctx;
@@ -34,6 +34,13 @@ void	des_ecb_encrypt(t_encrypt_args *args)
 	EVP_CIPHER_CTX_free(ctx);
 	EVP_cleanup();
 	OSSL_PROVIDER_unload(legacy_provider);
+	if (!args->salt_provided && !args->key_provided)
+	{
+		ft_memmove(ciphertext + 16, ciphertext, ciphertext_len);
+		ft_memcpy(ciphertext, "Salted__", 8);
+		ft_memcpy(ciphertext + 8, args->hex_salt, 8);
+		ciphertext_len += 16;
+	}
 	if (args->base64_mode)
 		encode_encrypted_message(args, ciphertext, ciphertext_len);
 	else
@@ -70,13 +77,18 @@ void	des_ecb_decrypt(t_encrypt_args *args)
 }
 
 // Main function for des-ecb encryption/decryption.
-//ft_hex_dump(args, sizeof(t_encrypt_args), 8);
 void	des_ecb(t_encrypt_args *args)
 {
-	if (!args->key_provided)
-		generate_derived_key(args);
-	else
+	if (args->key_provided)
 		convert_str_to_hex(args->key, args->hex_key);
+	else if (args->pass)
+	{
+		if (args->salt_provided)
+			convert_str_to_hex(args->salt, args->hex_salt);
+		else
+			generate_salt(args->hex_salt, args);
+		generate_derived_key(args);
+	}
 	if (args->encrypt_mode)
 		des_ecb_encrypt(args);
 	else if (args->decrypt_mode)

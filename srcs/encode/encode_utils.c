@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/15 13:12:56 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:30:38 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:25:26 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	print_encode_usage(void)
 // and exits with EXIT_FAILURE status.
 void	print_encode_strerror_and_exit(char *msg, t_encode_args *args)
 {
-	ft_printf("%s: %s\n", msg, strerror(errno));
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(strerror(errno), STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 	if (args->input_pipe)
 		free(args->input_pipe);
 	if (args->input_file)

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:21:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:34:36 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:22:18 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ void	print_hex_bytes(uint8_t *byte, uint8_t start, uint8_t end)
 
 void	print_error_and_exit(char *str)
 {
-	ft_printf("ft_ssl: usage error: %s\n", str);
-	ft_printf("Try 'ft_ssl -h' for more information.\n");
+	ft_putstr_fd("ft_ssl: usage error: ", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
+	ft_putstr_fd("\nTry 'ft_ssl -h' for more information.\n", STDERR_FILENO);
 	exit (EXIT_FAILURE);
 }
 

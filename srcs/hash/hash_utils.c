@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:47:43 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/29 10:24:03 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:25:20 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ void	print_hash_usage(void)
 // EXIT_FAILURE status.
 void	print_hash_strerror_and_exit(char *msg, t_hash_args *args)
 {
-	ft_printf("%s: %s\n", msg, strerror(errno));
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(strerror(errno), STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 	if (args->input_pipe)
 		free(args->input_pipe);
 	if (args->input_file)

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/04 15:34:16 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/05 10:49:55 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);
 /********************************** encrypt_password.c ************************/
 void		read_password_from_console(t_encrypt_args *args);
 void		generate_salt(uint8_t *salt, t_encrypt_args *args);
+void		extract_salt(t_encrypt_args *args);
 
 /********************************** encrypt_pbkdf2.c **************************/
 void		generate_derived_key(t_encrypt_args *args);

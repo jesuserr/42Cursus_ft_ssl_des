@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:57:42 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/04 15:33:48 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/05 10:51:11 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,15 @@ void	generate_salt(uint8_t *salt, t_encrypt_args *args)
 	if (read(fd, salt, KEY_LENGTH) < 0)
 		print_encrypt_strerror_and_exit("/dev/urandom", args);
 	close(fd);
+}
+
+// Extracts the salt from the message and stores it in 'args->hex_salt' to
+// generate the derived key. Updates 'args->message_length' and 'args->message'
+// pointer to point to the next part of the message.
+void	extract_salt(t_encrypt_args *args)
+{
+	ft_memcpy(args->hex_salt, args->message + 8, 8);
+	generate_derived_key(args);
+	args->message += 16;
+	args->message_length -= 16;
 }

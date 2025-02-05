@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:42:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/04 20:36:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:16:25 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ void	des_cbc_decrypt(t_encrypt_args *args)
 	unsigned char	plaintext[4096];
 	OSSL_PROVIDER	*legacy_provider;
 
-	if (args->base64_mode)
-		decode_encrypted_message(args);
 	legacy_provider = OSSL_PROVIDER_load(NULL, "legacy");
 	OSSL_PROVIDER_load(NULL, "legacy");
 	ctx = EVP_CIPHER_CTX_new();
@@ -98,5 +96,11 @@ void	des_cbc(t_encrypt_args *args)
 	if (args->encrypt_mode)
 		des_cbc_encrypt(args);
 	else if (args->decrypt_mode)
+	{
+		if (args->base64_mode)
+			decode_encrypted_message(args);
+		if (!ft_strncmp(args->message, "Salted__", 8))
+			extract_salt(args);
 		des_cbc_decrypt(args);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:15:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/03 10:40:04 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:49:24 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ static void	parse_file_content(t_encrypt_args *args, char *file_name)
 static void	parse_encrypt_function(t_encrypt_args *args, char *function)
 {
 	if (!ft_strncmp(function, "des", 3) && ft_strlen(function) == 3)
-		args->encrypt_function = 0;
+		args->encrypt_function = 1;
 	else if (!ft_strncmp(function, "des-ecb", 7) && ft_strlen(function) == 7)
 		args->encrypt_function = 0;
 	else if (!ft_strncmp(function, "des-cbc", 7) && ft_strlen(function) == 7)

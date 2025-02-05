@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:18:14 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/05 10:50:35 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/05 13:45:49 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	des_ecb_encrypt(t_encrypt_args *args)
 	OSSL_PROVIDER_unload(legacy_provider);
 	if (!args->salt_provided && !args->key_provided)
 	{
-		ft_memmove(ciphertext + 16, ciphertext, ciphertext_len);
-		ft_memcpy(ciphertext, "Salted__", 8);
-		ft_memcpy(ciphertext + 8, args->hex_salt, 8);
-		ciphertext_len += 16;
+		ft_memmove(ciphertext + SALT_TOTAL_LEN, ciphertext, ciphertext_len);
+		ft_memcpy(ciphertext, SALT_STR, SALT_LENGTH);
+		ft_memcpy(ciphertext + SALT_LENGTH, args->hex_salt, SALT_LENGTH);
+		ciphertext_len += SALT_TOTAL_LEN;
 	}
 	if (args->base64_mode)
 		encode_encrypted_message(args, ciphertext, ciphertext_len);
@@ -93,7 +93,7 @@ void	des_ecb(t_encrypt_args *args)
 	{
 		if (args->base64_mode)
 			decode_encrypted_message(args);
-		if (!ft_strncmp(args->message, "Salted__", 8))
+		if (!ft_strncmp(args->message, SALT_STR, SALT_LENGTH))
 			extract_salt(args);
 		des_ecb_decrypt(args);
 	}

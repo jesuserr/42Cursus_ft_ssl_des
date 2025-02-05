@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:48:16 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/01 13:54:00 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:50:32 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              DEFINES
 */
-# define ITERATIONS 10000U			// Number of iterations for PBKDF2
-# define KEY_LENGTH	8U				// DES Key length in bytes (64 bits)
+# define ITERATIONS 	10000U			// Number of iterations for PBKDF2
+# define KEY_LENGTH		8U				// Key length in bytes (64 bits)
+# define SALT_STR		"Salted__"		// Salt string for DES encryption
+# define SALT_LENGTH	8U				// Salt length in bytes (64 bits)
+# define SALT_TOTAL_LEN	16U				// (Salt string + Salt) length in bytes
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-

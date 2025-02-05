@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 12:33:47 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/03 12:35:36 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:20:58 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ unsigned char *ciphertext, int ciphertext_len)
 {
 	t_encode_args	encode_args;
 
+	ft_bzero(&encode_args, sizeof(t_encode_args));
 	encode_args.message = (char *)ciphertext;
 	encode_args.message_length = ciphertext_len;
 	encode_args.output_fd = args->output_fd;
@@ -63,6 +64,7 @@ void	decode_encrypted_message(t_encrypt_args *args)
 {
 	t_encode_args	decode_args;
 
+	ft_bzero(&decode_args, sizeof(t_encode_args));
 	decode_args.message = args->message;
 	decode_args.message_length = args->message_length;
 	remove_message_whitespaces_and_newlines(&decode_args);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/05 10:49:55 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:16:55 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void		set_flag_values(bool *boolean_field, char **string_field);
 /********************************** encode_parser.c ***************************/
 void		parse_encode_arguments(int argc, char **argv, t_encode_args *args);
 
+/********************************** encrypt_block_cipher.c ********************/
+void		generate_subkeys(t_encrypt_args *args);
+
 /********************************** encrypt_encode_utils.c ********************/
 void		decode_base64_message(t_encode_args *args, char *msg, char *copy);
 void		encode_encrypted_message(t_encrypt_args *args, \
@@ -88,6 +91,7 @@ void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);
 void		read_password_from_console(t_encrypt_args *args);
 void		generate_salt(uint8_t *salt, t_encrypt_args *args);
 void		extract_salt(t_encrypt_args *args);
+void		obtain_main_key(t_encrypt_args *args);
 
 /********************************** encrypt_pbkdf2.c **************************/
 void		generate_derived_key(t_encrypt_args *args);

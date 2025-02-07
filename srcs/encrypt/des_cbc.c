@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:42:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/05 13:45:49 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:17:10 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,8 @@ void	des_cbc(t_encrypt_args *args)
 		print_encrypt_strerror_and_exit("Initialization vector error", args);
 	}
 	convert_str_to_hex(args->iv, args->hex_iv);
-	if (args->key_provided)
-		convert_str_to_hex(args->key, args->hex_key);
-	else if (args->pass)
-	{
-		if (args->salt_provided)
-			convert_str_to_hex(args->salt, args->hex_salt);
-		else
-			generate_salt(args->hex_salt, args);
-		generate_derived_key(args);
-	}
+	obtain_main_key(args);
+	generate_subkeys(args);
 	if (args->encrypt_mode)
 		des_cbc_encrypt(args);
 	else if (args->decrypt_mode)

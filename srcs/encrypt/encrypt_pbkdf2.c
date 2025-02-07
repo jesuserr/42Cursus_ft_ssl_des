@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:03:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/04 15:33:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/06 19:02:10 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ static void	derive_key_pbkdf2(const char *password, const unsigned char *salt, \
 
 void	generate_derived_key(t_encrypt_args *args)
 {
-	derive_key_pbkdf2(args->pass, args->hex_salt, KEY_LENGTH, ITERATIONS, \
-	KEY_LENGTH, args->hex_key);
+	derive_key_pbkdf2(args->pass, args->hex_salt, BLOCK_LENGTH, ITERATIONS, \
+	BLOCK_LENGTH, args->hex_key);
 	//ft_printf("Hex salt: ");
-	//print_hex_bytes(args->hex_salt, 0, KEY_LENGTH - 1);
+	//print_hex_bytes(args->hex_salt, 0, BLOCK_LENGTH - 1);
 	//ft_printf("\nDerived Key: ");
-	//print_hex_bytes(args->hex_key, 0, KEY_LENGTH - 1);
+	//print_hex_bytes(args->hex_key, 0, BLOCK_LENGTH - 1);
 }

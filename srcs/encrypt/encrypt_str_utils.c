@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 13:25:55 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/04 12:10:50 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/06 19:01:56 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	convert_str_to_hex(const char *str, uint8_t *hex)
 
 	i = 0;
 	j = 0;
-	while (i < KEY_LENGTH * 2)
+	while (i < BLOCK_LENGTH * 2)
 	{
 		if (str[i] >= '0' && str[i] <= '9')
 			hex[j] = (str[i] - '0') << 4;
@@ -88,6 +88,6 @@ void	convert_str_to_hex(const char *str, uint8_t *hex)
 		i++;
 		j++;
 	}
-	while (++j < KEY_LENGTH)
+	while (++j < BLOCK_LENGTH)
 		hex[j] = 0x00;
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 11:57:42 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/05 13:48:21 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/07 21:17:02 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,21 @@ void	extract_salt(t_encrypt_args *args)
 	generate_derived_key(args);
 	args->message += SALT_TOTAL_LEN;
 	args->message_length -= SALT_TOTAL_LEN;
+}
+
+// If a key is provided by user, it is converted from string to hexadecimal.
+// If instead of a key, a password is provided, a derived key is generated from	
+// the password and salt (if salt is not provided, it is generated too).
+void	obtain_main_key(t_encrypt_args *args)
+{
+	if (args->key_provided)
+		convert_str_to_hex(args->key, args->hex_key);
+	else if (args->pass)
+	{
+		if (args->salt_provided)
+			convert_str_to_hex(args->salt, args->hex_salt);
+		else
+			generate_salt(args->hex_salt, args);
+		generate_derived_key(args);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 19:39:39 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/08 17:10:56 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/08 18:39:33 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static void	left_rotate_each_half_key(uint8_t *key, uint8_t rot)
 // Generates the 16 subkeys for the DES encryption algorithm. The key is
 // permuted using the PC-1 table, then rotated and permuted again ROUNDS times
 // using the PC-2 table. The result is stored in 'args->subkeys'.
+// In order to generate the subkeys for decryption, the process is the same but
+// the subkeys are stored in reverse order.
 void	generate_subkeys(t_encrypt_args *args)
 {
 	uint8_t	pc_1_key[SUBKEY_LENGTH];
@@ -71,8 +73,12 @@ void	generate_subkeys(t_encrypt_args *args)
 	while (i < ROUNDS)
 	{
 		left_rotate_each_half_key(pc_1_key, g_shift_table[i]);
-		bitwise_permutation(pc_1_key, args->subkeys[i], g_pc2_table, \
-		sizeof(g_pc2_table));
+		if (args->encrypt_mode)
+			bitwise_permutation(pc_1_key, args->subkeys[i], g_pc2_table, \
+			sizeof(g_pc2_table));
+		else if (args->decrypt_mode)
+			bitwise_permutation(pc_1_key, args->subkeys[ROUNDS - i - 1], \
+			g_pc2_table, sizeof(g_pc2_table));
 		i++;
 	}
 }

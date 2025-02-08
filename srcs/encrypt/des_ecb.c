@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:18:14 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/07 21:23:46 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/08 17:34:46 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,49 @@ void	des_ecb_decrypt(t_encrypt_args *args)
 		ft_putchar_fd(plaintext[i], args->output_fd);
 }
 
+void	process_block_cipher(t_encrypt_args *args)
+{
+	uint8_t	permuted_message[BLOCK_LENGTH];
+	uint8_t	right_half[BLOCK_LENGTH / 2];
+	uint8_t	left_half[BLOCK_LENGTH / 2];
+	uint8_t right_half_copy[BLOCK_LENGTH / 2];
+	uint8_t	round;
+	uint8_t final_message[BLOCK_LENGTH];
+
+	ft_bzero(permuted_message, BLOCK_LENGTH);
+	ft_bzero(right_half, BLOCK_LENGTH / 2);
+	ft_bzero(left_half, BLOCK_LENGTH / 2);
+	ft_bzero(right_half_copy, BLOCK_LENGTH / 2);
+	ft_bzero(final_message, BLOCK_LENGTH);
+	bitwise_permutation((uint8_t*)args->message, permuted_message, g_ip_table, sizeof(g_ip_table));
+	ft_printf("Initial permuted message: \n");
+	ft_hex_dump(permuted_message, BLOCK_LENGTH, BLOCK_LENGTH);
+	round = 0;
+	ft_memcpy(right_half, permuted_message + BLOCK_LENGTH / 2, BLOCK_LENGTH / 2);
+	ft_memcpy(left_half, permuted_message, BLOCK_LENGTH / 2);
+	while (round < ROUNDS)
+	{
+		ft_memcpy(right_half_copy, right_half, BLOCK_LENGTH / 2);		
+		mangler(right_half, round, args);		
+		for (int i = 0; i < 4; i++)
+			right_half[i] ^= left_half[i];
+		ft_memcpy(left_half, right_half_copy, BLOCK_LENGTH / 2);
+		round++;		
+	}
+	ft_memcpy(permuted_message, right_half, BLOCK_LENGTH / 2);
+	ft_memcpy(permuted_message + BLOCK_LENGTH / 2, left_half, BLOCK_LENGTH / 2);
+	ft_hex_dump(permuted_message, BLOCK_LENGTH, BLOCK_LENGTH);	
+	ft_printf("Final permuted message: \n");
+	bitwise_permutation(permuted_message, final_message, g_fp_table, sizeof(g_fp_table));
+	ft_hex_dump(final_message, BLOCK_LENGTH, BLOCK_LENGTH);
+}
+
 // Main function for des-ecb encryption/decryption.
 void	des_ecb(t_encrypt_args *args)
 {
 	obtain_main_key(args);
-	generate_subkeys(args);
+	//generate_subkeys(args);
+	//process_block_cipher(args);
 	if (args->encrypt_mode)
 		des_ecb_encrypt(args);
 	else if (args->decrypt_mode)

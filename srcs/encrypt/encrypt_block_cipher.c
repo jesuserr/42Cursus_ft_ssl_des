@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 19:39:39 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 12:26:32 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:44:57 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,9 @@ static void	mangler(uint8_t *right_half, uint8_t round, t_encrypt_args *args)
 // permuted using the IP table, then split into two halves. The right half is
 // passed through the mangler function ROUNDS times and the halves are swapped
 // before being permuted using the FP table.
-// The message is received in 'args->plain_block'.
-// The result is stored in 'args->cipher_block'.
+// Reversible function, encrypts and decrypts.
+// The message is received in 'args->input_block'.
+// The result is stored in 'args->output_block'.
 void	process_block_cipher(t_encrypt_args *args)
 {
 	uint8_t	permuted_msg[BLOCK_LENGTH];
@@ -134,7 +135,7 @@ void	process_block_cipher(t_encrypt_args *args)
 	uint8_t	round;
 
 	ft_bzero(permuted_msg, BLOCK_LENGTH);
-	bitwise_permutation(args->plain_block, permuted_msg, g_ip_table, 64);
+	bitwise_permutation(args->input_block, permuted_msg, g_ip_table, 64);
 	ft_memcpy(right_half, permuted_msg + BLOCK_LENGTH / 2, BLOCK_LENGTH / 2);
 	ft_memcpy(left_half, permuted_msg, BLOCK_LENGTH / 2);
 	round = 0;
@@ -150,6 +151,6 @@ void	process_block_cipher(t_encrypt_args *args)
 	}
 	ft_memcpy(permuted_msg, right_half, BLOCK_LENGTH / 2);
 	ft_memcpy(permuted_msg + BLOCK_LENGTH / 2, left_half, BLOCK_LENGTH / 2);
-	ft_bzero(args->cipher_block, BLOCK_LENGTH);
-	bitwise_permutation(permuted_msg, args->cipher_block, g_fp_table, 64);
+	ft_bzero(args->output_block, BLOCK_LENGTH);
+	bitwise_permutation(permuted_msg, args->output_block, g_fp_table, 64);
 }

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:42:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 13:22:04 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 17:28:47 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ static void	cbc_encrypt_message(t_encrypt_args *args)
 	i = 0;
 	while (i < args->message_length)
 	{
-		ft_memcpy(args->plain_block, args->plaintext + i, BLOCK_LENGTH);
+		ft_memcpy(args->input_block, args->plaintext + i, BLOCK_LENGTH);
 		j = 0;
 		while (j < BLOCK_LENGTH)
 		{
-			args->plain_block[j] ^= args->hex_iv[j];
+			args->input_block[j] ^= args->hex_iv[j];
 			j++;
 		}
 		process_block_cipher(args);
-		ft_memcpy(args->ciphertext + i, args->cipher_block, BLOCK_LENGTH);
-		ft_memcpy(args->hex_iv, args->cipher_block, BLOCK_LENGTH);
+		ft_memcpy(args->ciphertext + i, args->output_block, BLOCK_LENGTH);
+		ft_memcpy(args->hex_iv, args->output_block, BLOCK_LENGTH);
 		i += BLOCK_LENGTH;
 	}
 }
@@ -83,16 +83,16 @@ static void	des_cbc_decrypt(t_encrypt_args *args)
 	i = 0;
 	while (i < args->message_length)
 	{
-		ft_memcpy(args->plain_block, args->message + i, BLOCK_LENGTH);
+		ft_memcpy(args->input_block, args->message + i, BLOCK_LENGTH);
 		process_block_cipher(args);
 		j = 0;
 		while (j < BLOCK_LENGTH)
 		{
-			args->cipher_block[j] ^= args->hex_iv[j];
+			args->output_block[j] ^= args->hex_iv[j];
 			j++;
 		}
-		ft_memcpy(args->message + i, args->cipher_block, BLOCK_LENGTH);
-		ft_memcpy(args->hex_iv, args->plain_block, BLOCK_LENGTH);
+		ft_memcpy(args->message + i, args->output_block, BLOCK_LENGTH);
+		ft_memcpy(args->hex_iv, args->input_block, BLOCK_LENGTH);
 		i += BLOCK_LENGTH;
 	}
 	args->message_length -= args->message[args->message_length - 1];

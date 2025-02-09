@@ -6,41 +6,19 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:18:14 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 12:36:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:03:48 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
 
-// Implementation of PKCS#7 padding. The last block of the message is filled
-// with the number of bytes that are needed to complete the block. If the 
-// message is already a multiple of 8 bytes, a full block of padding is added.
-// The message is copied to a new buffer called 'plaintext' and the padding is
-// added at the end. Message length is updated to reflect the new length.
-static void	message_padding(t_encrypt_args *args)
-{
-	uint8_t		pad_len;
-	uint64_t	i;
-
-	pad_len = BLOCK_LENGTH - (args->message_length % BLOCK_LENGTH);
-	args->plaintext = ft_calloc(args->message_length + pad_len, \
-	sizeof(uint8_t));
-	if (!args->plaintext)
-		print_encrypt_strerror_and_exit("ft_calloc", args);
-	ft_memcpy(args->plaintext, args->message, args->message_length);
-	i = args->message_length;
-	while (i < args->message_length + pad_len)
-		args->plaintext[i++] = pad_len;
-	args->message_length += pad_len;
-}
-
 // Auxiliary function to reduce the size of the 'des_ecb_encrypt' function and
 // meet the 25 lines limit of the Norminette.
 // Divides the message in blocks of 8 bytes and processes each block with the
 // block cipher function. The result is stored in 'args->ciphertext'.
-static void	encrypt_message(t_encrypt_args *args)
+static void	ecb_encrypt_message(t_encrypt_args *args)
 {
-	uint32_t	i;
+	uint64_t	i;
 
 	i = 0;
 	while (i < args->message_length)
@@ -65,7 +43,7 @@ static void	des_ecb_encrypt(t_encrypt_args *args)
 	args->ciphertext = ft_calloc(args->message_length + 16, sizeof(uint8_t));
 	if (!args->ciphertext)
 		print_encrypt_strerror_and_exit("ft_calloc", args);
-	encrypt_message(args);
+	ecb_encrypt_message(args);
 	if (!args->salt_provided && !args->key_provided)
 	{
 		ft_memmove(args->ciphertext + SALT_TOTAL_LEN, args->ciphertext, \

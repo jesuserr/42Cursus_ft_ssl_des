@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:23:26 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 00:04:50 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 12:56:36 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,26 @@ void	bitwise_permutation(const uint8_t *src, uint8_t *dst, \
 		dst[i / 8] |= (bit << (7 - i % 8));
 		i++;
 	}
+}
+
+// Implementation of PKCS#7 padding. The last block of the message is filled
+// with the number of bytes that are needed to complete the block. If the 
+// message is already a multiple of 8 bytes, a full block of padding is added.
+// The message is copied to a new buffer called 'plaintext' and the padding is
+// added at the end. Message length is updated to reflect the new length.
+void	message_padding(t_encrypt_args *args)
+{
+	uint8_t		pad_len;
+	uint64_t	i;
+
+	pad_len = BLOCK_LENGTH - (args->message_length % BLOCK_LENGTH);
+	args->plaintext = ft_calloc(args->message_length + pad_len, \
+	sizeof(uint8_t));
+	if (!args->plaintext)
+		print_encrypt_strerror_and_exit("ft_calloc", args);
+	ft_memcpy(args->plaintext, args->message, args->message_length);
+	i = args->message_length;
+	while (i < args->message_length + pad_len)
+		args->plaintext[i++] = pad_len;
+	args->message_length += pad_len;
 }

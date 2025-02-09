@@ -6,72 +6,99 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:42:33 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/07 21:17:10 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 13:22:04 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
 
-// Cyphered text is limited to 4096 bytes. Should be dynamically allocated
-// and freed. Size changes depending on salt too.
-void	des_cbc_encrypt(t_encrypt_args *args)
+// Divides the message in blocks of 8 bytes, xor the block with the previous
+// cipher block (or the IV in the first block) and processes each block with the
+// block cipher function. The result is stored in 'args->ciphertext'.
+static void	cbc_encrypt_message(t_encrypt_args *args)
 {
-	EVP_CIPHER_CTX	*ctx;
-	int				len;
-	int				ciphertext_len;
-	unsigned char	ciphertext[4096];
-	OSSL_PROVIDER	*legacy_provider;
+	uint64_t	i;
+	uint8_t		j;
 
-	legacy_provider = OSSL_PROVIDER_load(NULL, "legacy");
-	OSSL_PROVIDER_load(NULL, "legacy");
-	ctx = EVP_CIPHER_CTX_new();
-	EVP_EncryptInit_ex(ctx, EVP_des_cbc(), NULL, args->hex_key, args->hex_iv);
-	EVP_EncryptUpdate(ctx, ciphertext, &len, (unsigned char *)args->message, \
-	args->message_length);
-	ciphertext_len = len;
-	EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
-	ciphertext_len += len;
-	EVP_CIPHER_CTX_free(ctx);
-	EVP_cleanup();
-	OSSL_PROVIDER_unload(legacy_provider);
-	if (!args->salt_provided && !args->key_provided)
+	i = 0;
+	while (i < args->message_length)
 	{
-		ft_memmove(ciphertext + SALT_TOTAL_LEN, ciphertext, ciphertext_len);
-		ft_memcpy(ciphertext, SALT_STR, SALT_LENGTH);
-		ft_memcpy(ciphertext + SALT_LENGTH, args->hex_salt, SALT_LENGTH);
-		ciphertext_len += SALT_TOTAL_LEN;
+		ft_memcpy(args->plain_block, args->plaintext + i, BLOCK_LENGTH);
+		j = 0;
+		while (j < BLOCK_LENGTH)
+		{
+			args->plain_block[j] ^= args->hex_iv[j];
+			j++;
+		}
+		process_block_cipher(args);
+		ft_memcpy(args->ciphertext + i, args->cipher_block, BLOCK_LENGTH);
+		ft_memcpy(args->hex_iv, args->cipher_block, BLOCK_LENGTH);
+		i += BLOCK_LENGTH;
 	}
-	if (args->base64_mode)
-		encode_encrypted_message(args, ciphertext, ciphertext_len);
-	else
-		for (int i = 0; i < ciphertext_len; i++)
-			ft_putchar_fd(ciphertext[i], args->output_fd);
 }
 
-// Plain text is limited to 4096 bytes. Should be dynamically allocated
-// and freed.
-void	des_cbc_decrypt(t_encrypt_args *args)
+// CBC encryption main function.
+// ciphertext allocation is message_length + 16 bytes in order to provide space
+// for the salt and the salted__ string (if provided). If no salt is provided,
+// the previously generated salt is added at the beginning of the ciphertext.
+// At the end it encodes the encrypted message in base64 or prints it in binary,
+// depending on the mode, to the specified output file descriptor.
+static void	des_cbc_encrypt(t_encrypt_args *args)
 {
-	EVP_CIPHER_CTX	*ctx;
-	int				len;
-	int				plaintext_len;
-	unsigned char	plaintext[4096];
-	OSSL_PROVIDER	*legacy_provider;
+	uint64_t	i;
 
-	legacy_provider = OSSL_PROVIDER_load(NULL, "legacy");
-	OSSL_PROVIDER_load(NULL, "legacy");
-	ctx = EVP_CIPHER_CTX_new();
-	EVP_DecryptInit_ex(ctx, EVP_des_cbc(), NULL, args->hex_key, args->hex_iv);
-	EVP_DecryptUpdate(ctx, plaintext, &len, (unsigned char *)args->message, \
-	args->message_length);
-	plaintext_len = len;
-	EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
-	plaintext_len += len;
-	EVP_CIPHER_CTX_free(ctx);
-	EVP_cleanup();
-	OSSL_PROVIDER_unload(legacy_provider);
-	for (int i = 0; i < plaintext_len; i++)
-		ft_putchar_fd(plaintext[i], args->output_fd);
+	args->ciphertext = ft_calloc(args->message_length + 16, sizeof(uint8_t));
+	if (!args->ciphertext)
+		print_encrypt_strerror_and_exit("ft_calloc", args);
+	cbc_encrypt_message(args);
+	if (!args->salt_provided && !args->key_provided)
+	{
+		ft_memmove(args->ciphertext + SALT_TOTAL_LEN, args->ciphertext, \
+		args->message_length);
+		ft_memcpy(args->ciphertext, SALT_STR, SALT_LENGTH);
+		ft_memcpy(args->ciphertext + SALT_LENGTH, args->hex_salt, SALT_LENGTH);
+		args->message_length += SALT_TOTAL_LEN;
+	}
+	i = 0;
+	if (args->base64_mode)
+		encode_encrypted_message(args, args->ciphertext, args->message_length);
+	else
+		while (i < args->message_length)
+			ft_putchar_fd(args->ciphertext[i++], args->output_fd);
+	free(args->plaintext);
+	free(args->ciphertext);
+}
+
+// CBC decryption main function.
+// Before calling this function, the message has been decoded from base64 (if
+// it was encoded) and the salt been extracted from the message (if it was
+// provided). After decrypting the message, message length is updated
+// accordingly to the padding provided and the message is printed to the output
+// file descriptor.
+static void	des_cbc_decrypt(t_encrypt_args *args)
+{
+	uint64_t	i;
+	uint8_t		j;
+
+	i = 0;
+	while (i < args->message_length)
+	{
+		ft_memcpy(args->plain_block, args->message + i, BLOCK_LENGTH);
+		process_block_cipher(args);
+		j = 0;
+		while (j < BLOCK_LENGTH)
+		{
+			args->cipher_block[j] ^= args->hex_iv[j];
+			j++;
+		}
+		ft_memcpy(args->message + i, args->cipher_block, BLOCK_LENGTH);
+		ft_memcpy(args->hex_iv, args->plain_block, BLOCK_LENGTH);
+		i += BLOCK_LENGTH;
+	}
+	args->message_length -= args->message[args->message_length - 1];
+	i = 0;
+	while (i < args->message_length)
+		ft_putchar_fd(args->message[i++], args->output_fd);
 }
 
 // Main function for des-cbc encryption/decryption.
@@ -84,15 +111,19 @@ void	des_cbc(t_encrypt_args *args)
 	}
 	convert_str_to_hex(args->iv, args->hex_iv);
 	obtain_main_key(args);
-	generate_subkeys(args);
 	if (args->encrypt_mode)
+	{
+		generate_subkeys(args);
+		message_padding(args);
 		des_cbc_encrypt(args);
+	}
 	else if (args->decrypt_mode)
 	{
 		if (args->base64_mode)
 			decode_encrypted_message(args);
 		if (!ft_strncmp(args->message, SALT_STR, SALT_LENGTH))
 			extract_salt(args);
+		generate_subkeys(args);
 		des_cbc_decrypt(args);
 	}
 }

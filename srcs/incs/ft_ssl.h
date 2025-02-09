@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/08 20:17:45 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 12:57:05 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ void		print_encrypt_usage(void);
 void		print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args);
 void		bitwise_permutation(const uint8_t *src, uint8_t *dst, \
 			const uint8_t *table, uint8_t length);
+void		message_padding(t_encrypt_args *args);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

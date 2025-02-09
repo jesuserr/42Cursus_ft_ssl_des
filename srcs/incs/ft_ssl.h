@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/08 17:17:31 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/08 20:17:45 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,8 @@ void		print_encode_strerror_and_exit(char *msg, t_encode_args *args);
 void		remove_message_whitespaces_and_newlines(t_encode_args *args);
 
 /********************************** encrypt_block_cipher.c ********************/
-void		bitwise_permutation(const uint8_t *src, uint8_t *dst, \
-			const uint8_t *table, uint8_t length);
 void		generate_subkeys(t_encrypt_args *args);
 void		process_block_cipher(t_encrypt_args *args);
-void		mangler(uint8_t *right_half, uint8_t round, t_encrypt_args *args);
 
 /********************************** encrypt_encode_utils.c ********************/
 void		decode_base64_message(t_encode_args *args, char *msg, char *copy);
@@ -109,6 +106,8 @@ void		convert_str_to_hex(const char *str, uint8_t *hex);
 void		calls_to_encrypt_function(t_encrypt_args *args);
 void		print_encrypt_usage(void);
 void		print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args);
+void		bitwise_permutation(const uint8_t *src, uint8_t *dst, \
+			const uint8_t *table, uint8_t length);
 
 /********************************** hash_parser.c *****************************/
 void		parse_hash_arguments(int argc, char **argv, t_hash_args *args);

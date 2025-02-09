@@ -6,122 +6,125 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:18:14 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/08 18:58:34 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 12:36:47 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
 
-// Cyphered text is limited to 4096 bytes. Should be dynamically allocated
-// and freed. Size changes depending on salt too.
-void	des_ecb_encrypt(t_encrypt_args *args)
+// Implementation of PKCS#7 padding. The last block of the message is filled
+// with the number of bytes that are needed to complete the block. If the 
+// message is already a multiple of 8 bytes, a full block of padding is added.
+// The message is copied to a new buffer called 'plaintext' and the padding is
+// added at the end. Message length is updated to reflect the new length.
+static void	message_padding(t_encrypt_args *args)
 {
-	EVP_CIPHER_CTX	*ctx;
-	int				len;
-	int				ciphertext_len;
-	unsigned char	ciphertext[4096];
-	OSSL_PROVIDER	*legacy_provider;
+	uint8_t		pad_len;
+	uint64_t	i;
 
-	legacy_provider = OSSL_PROVIDER_load(NULL, "legacy");
-	OSSL_PROVIDER_load(NULL, "legacy");
-	ctx = EVP_CIPHER_CTX_new();
-	EVP_EncryptInit_ex(ctx, EVP_des_ecb(), NULL, args->hex_key, NULL);
-	EVP_EncryptUpdate(ctx, ciphertext, &len, (unsigned char *)args->message, \
-	args->message_length);
-	ciphertext_len = len;
-	EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
-	ciphertext_len += len;
-	EVP_CIPHER_CTX_free(ctx);
-	EVP_cleanup();
-	OSSL_PROVIDER_unload(legacy_provider);
+	pad_len = BLOCK_LENGTH - (args->message_length % BLOCK_LENGTH);
+	args->plaintext = ft_calloc(args->message_length + pad_len, \
+	sizeof(uint8_t));
+	if (!args->plaintext)
+		print_encrypt_strerror_and_exit("ft_calloc", args);
+	ft_memcpy(args->plaintext, args->message, args->message_length);
+	i = args->message_length;
+	while (i < args->message_length + pad_len)
+		args->plaintext[i++] = pad_len;
+	args->message_length += pad_len;
+}
+
+// Auxiliary function to reduce the size of the 'des_ecb_encrypt' function and
+// meet the 25 lines limit of the Norminette.
+// Divides the message in blocks of 8 bytes and processes each block with the
+// block cipher function. The result is stored in 'args->ciphertext'.
+static void	encrypt_message(t_encrypt_args *args)
+{
+	uint32_t	i;
+
+	i = 0;
+	while (i < args->message_length)
+	{
+		ft_memcpy(args->plain_block, args->plaintext + i, BLOCK_LENGTH);
+		process_block_cipher(args);
+		ft_memcpy(args->ciphertext + i, args->cipher_block, BLOCK_LENGTH);
+		i += BLOCK_LENGTH;
+	}
+}
+
+// ECB encryption main function.
+// ciphertext allocation is message_length + 16 bytes in order to provide space
+// for the salt and the salted__ string (if provided). If no salt is provided,
+// the previously generated salt is added at the beginning of the ciphertext.
+// At the end it encodes the encrypted message in base64 or prints it in binary,
+// depending on the mode, to the specified output file descriptor.
+static void	des_ecb_encrypt(t_encrypt_args *args)
+{
+	uint64_t	i;
+
+	args->ciphertext = ft_calloc(args->message_length + 16, sizeof(uint8_t));
+	if (!args->ciphertext)
+		print_encrypt_strerror_and_exit("ft_calloc", args);
+	encrypt_message(args);
 	if (!args->salt_provided && !args->key_provided)
 	{
-		ft_memmove(ciphertext + SALT_TOTAL_LEN, ciphertext, ciphertext_len);
-		ft_memcpy(ciphertext, SALT_STR, SALT_LENGTH);
-		ft_memcpy(ciphertext + SALT_LENGTH, args->hex_salt, SALT_LENGTH);
-		ciphertext_len += SALT_TOTAL_LEN;
+		ft_memmove(args->ciphertext + SALT_TOTAL_LEN, args->ciphertext, \
+		args->message_length);
+		ft_memcpy(args->ciphertext, SALT_STR, SALT_LENGTH);
+		ft_memcpy(args->ciphertext + SALT_LENGTH, args->hex_salt, SALT_LENGTH);
+		args->message_length += SALT_TOTAL_LEN;
 	}
+	i = 0;
 	if (args->base64_mode)
-		encode_encrypted_message(args, ciphertext, ciphertext_len);
+		encode_encrypted_message(args, args->ciphertext, args->message_length);
 	else
-		for (int i = 0; i < ciphertext_len; i++)
-			ft_putchar_fd(ciphertext[i], args->output_fd);
-	//ft_printf("Ciphertext: \n");
-	//ft_hex_dump(ciphertext, ciphertext_len, 16);
+		while (i < args->message_length)
+			ft_putchar_fd(args->ciphertext[i++], args->output_fd);
+	free(args->plaintext);
+	free(args->ciphertext);
 }
 
-// Plain text is limited to 4096 bytes. Should be dynamically allocated
-// and freed.
-void	des_ecb_decrypt(t_encrypt_args *args)
+// ECB decryption main function.
+// Before calling this function, the message has been decoded from base64 (if
+// it was encoded) and the salt been extracted from the message (if it was
+// provided). After decrypting the message, message length is updated
+// accordingly to the padding provided and the message is printed to the output
+// file descriptor.
+static void	des_ecb_decrypt(t_encrypt_args *args)
 {
-	EVP_CIPHER_CTX	*ctx;
-	int				len;
-	int				plaintext_len;
-	unsigned char	plaintext[4096];
-	OSSL_PROVIDER	*legacy_provider;
+	uint64_t	i;
 
-	legacy_provider = OSSL_PROVIDER_load(NULL, "legacy");
-	OSSL_PROVIDER_load(NULL, "legacy");
-	ctx = EVP_CIPHER_CTX_new();
-	EVP_DecryptInit_ex(ctx, EVP_des_ecb(), NULL, args->hex_key, NULL);
-	EVP_DecryptUpdate(ctx, plaintext, &len, (unsigned char *)args->message, \
-	args->message_length);
-	plaintext_len = len;
-	EVP_DecryptFinal_ex(ctx, plaintext + len, &len);
-	plaintext_len += len;
-	EVP_CIPHER_CTX_free(ctx);
-	EVP_cleanup();
-	OSSL_PROVIDER_unload(legacy_provider);
-	for (int i = 0; i < plaintext_len; i++)
-		ft_putchar_fd(plaintext[i], args->output_fd);
-}
-
-void	process_block_cipher(t_encrypt_args *args)
-{
-	uint8_t	permuted_msg[BLOCK_LENGTH];
-	uint8_t	right_half[BLOCK_LENGTH / 2];
-	uint8_t	left_half[BLOCK_LENGTH / 2];
-	uint8_t	right_half_copy[BLOCK_LENGTH / 2];
-	uint8_t	round;
-
-	ft_bzero(permuted_msg, BLOCK_LENGTH);
-	bitwise_permutation(args->plain_block, permuted_msg, g_ip_table, 64);
-	ft_memcpy(right_half, permuted_msg + BLOCK_LENGTH / 2, BLOCK_LENGTH / 2);
-	ft_memcpy(left_half, permuted_msg, BLOCK_LENGTH / 2);
-	round = 0;
-	while (round < ROUNDS)
+	i = 0;
+	while (i < args->message_length)
 	{
-		ft_memcpy(right_half_copy, right_half, BLOCK_LENGTH / 2);
-		mangler(right_half, round, args);
-		right_half[0] ^= left_half[0];
-		right_half[1] ^= left_half[1];
-		right_half[2] ^= left_half[2];
-		right_half[3] ^= left_half[3];
-		ft_memcpy(left_half, right_half_copy, BLOCK_LENGTH / 2);
-		round++;
+		ft_memcpy(args->plain_block, args->message + i, BLOCK_LENGTH);
+		process_block_cipher(args);
+		ft_memcpy(args->message + i, args->cipher_block, BLOCK_LENGTH);
+		i += BLOCK_LENGTH;
 	}
-	ft_memcpy(permuted_msg, right_half, BLOCK_LENGTH / 2);
-	ft_memcpy(permuted_msg + BLOCK_LENGTH / 2, left_half, BLOCK_LENGTH / 2);
-	bitwise_permutation(permuted_msg, args->cipher_block, g_fp_table, 64);
+	args->message_length -= args->message[args->message_length - 1];
+	i = 0;
+	while (i < args->message_length)
+		ft_putchar_fd(args->message[i++], args->output_fd);
 }
 
 // Main function for des-ecb encryption/decryption.
 void	des_ecb(t_encrypt_args *args)
 {
 	obtain_main_key(args);
-	generate_subkeys(args);
-	ft_memcpy(args->plain_block, args->message, BLOCK_LENGTH);
-	ft_hex_dump(args->plain_block, BLOCK_LENGTH, 16);
-	process_block_cipher(args);
-	ft_hex_dump(args->cipher_block, BLOCK_LENGTH, 16);
 	if (args->encrypt_mode)
+	{
+		generate_subkeys(args);
+		message_padding(args);
 		des_ecb_encrypt(args);
+	}
 	else if (args->decrypt_mode)
 	{
 		if (args->base64_mode)
 			decode_encrypted_message(args);
 		if (!ft_strncmp(args->message, SALT_STR, SALT_LENGTH))
 			extract_salt(args);
+		generate_subkeys(args);
 		des_ecb_decrypt(args);
 	}
 }

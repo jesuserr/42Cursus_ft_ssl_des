@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:23:26 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/04 12:24:57 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 00:04:50 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,27 @@ void	print_encrypt_strerror_and_exit(char *msg, t_encrypt_args *args)
 		close(args->output_fd);
 	if (!args->pass_provided && args->pass)
 		free(args->pass);
+	if (args->plaintext)
+		free(args->plaintext);
+	if (args->ciphertext)
+		free(args->ciphertext);
 	exit(EXIT_FAILURE);
+}
+
+// Permutate the bits of the message provided in 'src' and save it into 'dst' 
+// using the given permutation table and its length.
+// 'src' and 'dst' cannot be the same.
+void	bitwise_permutation(const uint8_t *src, uint8_t *dst, \
+		const uint8_t *table, uint8_t length)
+{
+	uint8_t	i;
+	uint8_t	bit;
+
+	i = 0;
+	while (i < length)
+	{
+		bit = (src[(table[i] - 1) / 8] >> (7 - ((table[i] - 1) % 8))) & 0x01;
+		dst[i / 8] |= (bit << (7 - i % 8));
+		i++;
+	}
 }

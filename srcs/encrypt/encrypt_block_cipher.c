@@ -6,29 +6,11 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 19:39:39 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/08 18:39:33 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 12:26:32 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
-
-// Permutate the bits of the message provided in 'src' and save it into 'dst' 
-// using the given permutation table and its length.
-// 'src' and 'dst' cannot be the same.
-void	bitwise_permutation(const uint8_t *src, uint8_t *dst, \
-		const uint8_t *table, uint8_t length)
-{
-	uint8_t	i;
-	uint8_t	bit;
-
-	i = 0;
-	while (i < length)
-	{
-		bit = (src[(table[i] - 1) / 8] >> (7 - ((table[i] - 1) % 8))) & 0x01;
-		dst[i / 8] |= (bit << (7 - i % 8));
-		i++;
-	}
-}
 
 // Rotates independently to the left the first 28 bits and the last 28 bits 
 // of the key. Number of left rotations are specified in the shift table and 
@@ -115,7 +97,7 @@ static void	keyed_substitution(uint8_t *input, uint8_t *output)
 // Performs the mangler function of the DES encryption algorithm. The right half
 // of the message is expanded, XORed with the subkey, passed through the S-boxes
 // and permuted using the P table. The result is returned back in 'right_half'.
-void	mangler(uint8_t *right_half, uint8_t round, t_encrypt_args *args)
+static void	mangler(uint8_t *right_half, uint8_t round, t_encrypt_args *args)
 {
 	uint8_t	expanded_right[ROUND_KEY_LENGTH];
 	uint8_t	permuted_right[ROUND_KEY_LENGTH];
@@ -135,4 +117,39 @@ void	mangler(uint8_t *right_half, uint8_t round, t_encrypt_args *args)
 	bitwise_permutation(right_half, permuted_right, g_p_table, \
 	sizeof(g_p_table));
 	ft_memcpy(right_half, permuted_right, BLOCK_LENGTH / 2);
+}
+
+// Performs the DES encryption algorithm on a single block of data. The block is
+// permuted using the IP table, then split into two halves. The right half is
+// passed through the mangler function ROUNDS times and the halves are swapped
+// before being permuted using the FP table.
+// The message is received in 'args->plain_block'.
+// The result is stored in 'args->cipher_block'.
+void	process_block_cipher(t_encrypt_args *args)
+{
+	uint8_t	permuted_msg[BLOCK_LENGTH];
+	uint8_t	right_half[BLOCK_LENGTH / 2];
+	uint8_t	left_half[BLOCK_LENGTH / 2];
+	uint8_t	right_half_copy[BLOCK_LENGTH / 2];
+	uint8_t	round;
+
+	ft_bzero(permuted_msg, BLOCK_LENGTH);
+	bitwise_permutation(args->plain_block, permuted_msg, g_ip_table, 64);
+	ft_memcpy(right_half, permuted_msg + BLOCK_LENGTH / 2, BLOCK_LENGTH / 2);
+	ft_memcpy(left_half, permuted_msg, BLOCK_LENGTH / 2);
+	round = 0;
+	while (round < ROUNDS)
+	{
+		ft_memcpy(right_half_copy, right_half, BLOCK_LENGTH / 2);
+		mangler(right_half, round++, args);
+		right_half[0] ^= left_half[0];
+		right_half[1] ^= left_half[1];
+		right_half[2] ^= left_half[2];
+		right_half[3] ^= left_half[3];
+		ft_memcpy(left_half, right_half_copy, BLOCK_LENGTH / 2);
+	}
+	ft_memcpy(permuted_msg, right_half, BLOCK_LENGTH / 2);
+	ft_memcpy(permuted_msg + BLOCK_LENGTH / 2, left_half, BLOCK_LENGTH / 2);
+	ft_bzero(args->cipher_block, BLOCK_LENGTH);
+	bitwise_permutation(permuted_msg, args->cipher_block, g_fp_table, 64);
 }

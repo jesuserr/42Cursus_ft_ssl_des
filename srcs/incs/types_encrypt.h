@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:48:16 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/08 18:39:43 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/09 11:54:00 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ typedef struct s_encrypt_args
 	uint8_t		subkeys[ROUNDS][ROUND_KEY_LENGTH];
 	uint8_t		plain_block[BLOCK_LENGTH];
 	uint8_t		cipher_block[BLOCK_LENGTH];
+	uint8_t		*ciphertext;
+	uint8_t		*plaintext;
 }	t_encrypt_args;
 
 // Permutation tables for DES encryption. Example: for 'g_pc1_table' the first

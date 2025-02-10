@@ -1,0 +1,22 @@
+my_password
+6D795F70617373776F7264
+my_salto
+6D795F73616C746F        (8 bytes)
+
+- clave generada por openssl
+
+echo "hola" | openssl des-ecb -provider legacy -provider default -pbkdf2 -pass pass:my_password -S 6D795F73616C746F -P  
+
+salt=6D795F73616C746F
+key=7608F9E9D34B608C
+
+- clave generada por mi programa con pbkdf2 de openssl
+
+make && echo "hola" | ./ft_ssl des-ecb -p my_password -s 6D795F73616C746F
+
+Hex salt: 6d795f73616c746f
+Derived Key: 0x7fff7d265229:  7608f9e9d34b608c   v....K`.
+
+- clave generada programa python
+
+Clave derivada: 7608f9e9d34b608c

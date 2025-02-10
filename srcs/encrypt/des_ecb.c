@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 11:18:14 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 17:28:47 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:57:27 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void	des_ecb(t_encrypt_args *args)
 	{
 		if (args->base64_mode)
 			decode_encrypted_message(args);
+		else
+			is_base64_encoded_message(args);
 		if (!ft_strncmp(args->message, SALT_STR, SALT_LENGTH))
 			extract_salt(args);
 		generate_subkeys(args);

@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 20:41:12 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:37:06 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void		decode_base64_message(t_encode_args *args, char *msg, char *copy);
 void		encode_encrypted_message(t_encrypt_args *args, \
 			unsigned char *ciphertext, int ciphertext_len);
 void		decode_encrypted_message(t_encrypt_args *args);
+void		is_base64_encoded_message(t_encrypt_args *args);
 
 /********************************** encrypt_parser.c **************************/
 void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);

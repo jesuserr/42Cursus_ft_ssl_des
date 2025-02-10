@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 12:33:47 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/05 15:20:58 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:06:53 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,29 @@ void	decode_encrypted_message(t_encrypt_args *args)
 	}
 	decode_base64_message(&decode_args, args->message, args->message);
 	args->message_length = decode_args.message_length;
+}
+
+// Checks if the message is base64 encoded. If it is, prints an error message
+// and exits the program. Main purpose is to avoid to decrypt a message that is
+// base64 encoded and the user forgot to indicate flag '-a' which would lead to
+// a segfault (specially when the salt must be extracted from message).
+// A copy of message is made since the message is modified.
+void	is_base64_encoded_message(t_encrypt_args *args)
+{
+	t_encode_args	decode_args;
+
+	ft_bzero(&decode_args, sizeof(t_encode_args));
+	decode_args.message = ft_calloc(args->message_length, sizeof(uint8_t));
+	if (!decode_args.message)
+		print_encrypt_strerror_and_exit("ft_calloc", args);
+	ft_memcpy(decode_args.message, args->message, args->message_length);
+	decode_args.message_length = args->message_length;
+	remove_message_whitespaces_and_newlines(&decode_args);
+	if (proper_encoded_message(&decode_args))
+	{
+		free(decode_args.message);
+		errno = EBADMSG;
+		print_encrypt_strerror_and_exit("Input message base64 encoded", args);
+	}
+	free(decode_args.message);
 }

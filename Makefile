@@ -6,7 +6,7 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 17:09:51 by jesuserr          #+#    #+#              #
-#    Updated: 2025/02/07 19:40:45 by jesuserr         ###   ########.fr        #
+#    Updated: 2025/02/11 19:58:41 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS = 	main.c \
 	   	encrypt/encrypt_parser.c encrypt/encrypt_utils.c encrypt/des_ecb.c \
 		encrypt/encrypt_password.c encrypt/des_cbc.c encrypt/encrypt_pbkdf2.c \
 		encrypt/encrypt_str_utils.c encrypt/encrypt_encode_utils.c \
-		encrypt/encrypt_block_cipher.c
+		encrypt/encrypt_block_cipher.c encrypt/encrypt_sha256.c
 PATH_SRCS = ./srcs/
 PATH_INCS = ./srcs/incs/
 PATH_OBJS = ./objs/

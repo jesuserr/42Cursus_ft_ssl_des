@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/10 12:37:06 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/11 19:57:49 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@ void		encode_encrypted_message(t_encrypt_args *args, \
 void		decode_encrypted_message(t_encrypt_args *args);
 void		is_base64_encoded_message(t_encrypt_args *args);
 
+/********************************** encrypt_hmac_sha256.c *********************/
+void		sha256(t_hash_args *args, t_encrypt_args *encrypt_args);
+
 /********************************** encrypt_parser.c **************************/
 void		parse_encrypt_arguments(int argc, char **argv, t_encrypt_args *arg);
 
@@ -96,6 +99,7 @@ void		obtain_main_key(t_encrypt_args *args);
 
 /********************************** encrypt_pbkdf2.c **************************/
 void		generate_derived_key(t_encrypt_args *args);
+void		hmac_sha256(t_encrypt_args *args);
 
 /********************************** encrypt_str_utils.c ***********************/
 bool		str_is_hex(char *str, t_encrypt_args *args);

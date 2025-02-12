@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 19:39:39 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 17:44:57 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 23:10:50 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static void	left_rotate_each_half_key(uint8_t *key, uint8_t rot)
 // permuted using the PC-1 table, then rotated and permuted again ROUNDS times
 // using the PC-2 table. The result is stored in 'args->subkeys'.
 // In order to generate the subkeys for decryption, the process is the same but
-// the subkeys are stored in reverse order.
+// the subkeys are stored in reverse order. Modes 2 and 3 (CFB and OFB) do not
+// require the subkeys to be reversed for decryption.
 void	generate_subkeys(t_encrypt_args *args)
 {
 	uint8_t	pc_1_key[SUBKEY_LENGTH];
@@ -55,7 +56,8 @@ void	generate_subkeys(t_encrypt_args *args)
 	while (i < ROUNDS)
 	{
 		left_rotate_each_half_key(pc_1_key, g_shift_table[i]);
-		if (args->encrypt_mode)
+		if (args->encrypt_mode || args->encrypt_function == 2 || \
+		args->encrypt_function == 3)
 			bitwise_permutation(pc_1_key, args->subkeys[i], g_pc2_table, \
 			sizeof(g_pc2_table));
 		else if (args->decrypt_mode)

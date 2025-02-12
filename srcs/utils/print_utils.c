@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 22:21:30 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/04 12:22:18 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 20:49:24 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ void	print_total_usage(void)
 		"  -e          encode mode (default)\n"
 		"  -i <file>   input file\n"
 		"  -o <file>   output file\n\n"
-		"Cipher options:\n  command     des, des-ecb or des-cbc\n"
-		"  -h          print help and exit\n"
+		"Cipher options:\n  command     des, des-ecb, des-cbc, des-cfb, des-ofb"
+		"\n  -h          print help and exit\n"
 		"  -a          decode/encode the input/output in base64\n"
 		"  -d          decrypt mode\n"
 		"  -e          encrypt mode (default)\n"

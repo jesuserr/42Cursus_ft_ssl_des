@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:12:21 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/01/26 19:40:46 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 20:49:35 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static uint8_t	pre_parser(int argc, char **argv)
 		return (ENCODE_COMMAND);
 	else if ((!ft_strncmp(argv[1], "des", 3) && ft_strlen(argv[1]) == 3) || \
 		(!ft_strncmp(argv[1], "des-ecb", 7) && ft_strlen(argv[1]) == 7) || \
+		(!ft_strncmp(argv[1], "des-cfb", 7) && ft_strlen(argv[1]) == 7) || \
+		(!ft_strncmp(argv[1], "des-ofb", 7) && ft_strlen(argv[1]) == 7) || \
 		(!ft_strncmp(argv[1], "des-cbc", 7) && ft_strlen(argv[1]) == 7))
 		return (ENCRYPT_COMMAND);
 	else if (!ft_strncmp(argv[1], "-h", 2) && ft_strlen(argv[1]) == 2)

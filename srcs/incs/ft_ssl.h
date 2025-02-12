@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:11:34 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/12 12:45:50 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 20:47:31 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # include "base64.h"							// for base64 encode function
 # include "des_ecb.h"						    // for des-ecb encrypt function
 # include "des_cbc.h"						    // for des-cbc encrypt function
+# include "des_cfb.h"						    // for des-cfb encrypt function
+# include "des_ofb.h"						    // for des-cob encrypt function
 # include <string.h>							// for strerror
 # include <fcntl.h>								// for open
 # include <errno.h>								// for errno

@@ -1,0 +1,32 @@
+export DES_KEY="C0FFEE69DEADBEEF"
+echo "foo bar" | ./ft_ssl des-ecb -k "$DES_KEY" | openssl des-ecb -d -provider legacy -provider default -pbkdf2 -K "$DES_KEY"
+echo "foo bar" | openssl des-ecb -K "$DES_KEY" -provider legacy -provider default -pbkdf2 | ./ft_ssl des-ecb -d -k "$DES_KEY"
+echo "smol" | ./ft_ssl des-ecb -k "$DES_KEY" | openssl des-ecb -d -K "$DES_KEY" -provider legacy -provider default -pbkdf2
+echo "smol" | openssl des-ecb -provider legacy -provider default -pbkdf2 -K "$DES_KEY" | ./ft_ssl des-ecb -d -k "$DES_KEY"
+echo "testing the key now" | openssl des-ecb -provider legacy -provider default -K "ABCD" | ./ft_ssl des-ecb -d -k "ABCD"
+echo "More key tests" | openssl des-ecb -provider legacy -provider default -K "FFFFFFFFFFFFFFFF" | ./ft_ssl des-ecb -d -k "FFFFFFFFFFFFFFFF"
+echo "what kind of lock takes no key?" | openssl des-ecb -provider legacy -provider default -K "00000000" | ./ft_ssl des-ecb -d -k "00000000"
+
+-provider legacy -provider default -pbkdf2
+
+cfb
+
+make && cat README.md | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 -a | openssl des-cfb -provider legacy -provider default -pbkdf2 -base64 -d -K 1234567890abcdef -iv abcdef1234567890
+make && cat Makefile | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 -a | openssl des-cfb -provider legacy -provider default -pbkdf2 -base64 -d -K 1234567890abcdef -iv abcdef1234567890
+make && cat README.md | openssl des-cfb -provider legacy -provider default -pbkdf2 -base64 -K 1234567890abcdef -iv abcdef1234567890 | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 -a -d
+make && cat README.md | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 -a | openssl des-cfb -provider legacy -provider default -pbkdf2 -base64 -K 1234567890abcdef -iv abcdef1234567890 -d
+make && cat Makefile | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 -a | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 -d -a
+
+cat ft_ssl | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 | ./ft_ssl des-cfb -k 1234567890abcdef -v abcdef1234567890 -d | ./ft_ssl des-cfb -p pass -v abcdef1234567890 | 
+./ft_ssl des-cfb -p pass -v abcdef1234567890 -d | ./ft_ssl des-cfb -v abcdef1234567890 -p hola -s 1234567890 | ./ft_ssl des-cfb -v abcdef1234567890 -p hola -s 1234567890 -d -o ft_ssl2 && chmod u+x ft_ssl2 && ./ft_ssl2
+
+ofb
+
+make && cat README.md | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 -a | openssl des-ofb -provider legacy -provider default -pbkdf2 -base64 -d -K 1234567890abcdef -iv abcdef1234567890
+make && cat Makefile | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 -a | openssl des-ofb -provider legacy -provider default -pbkdf2 -base64 -d -K 1234567890abcdef -iv abcdef1234567890
+make && cat README.md | openssl des-ofb -provider legacy -provider default -pbkdf2 -base64 -K 1234567890abcdef -iv abcdef1234567890 | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 -a -d
+make && cat README.md | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 -a | openssl des-ofb -provider legacy -provider default -pbkdf2 -base64 -K 1234567890abcdef -iv abcdef1234567890 -d
+make && cat Makefile | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 -a | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 -d -a
+
+cat ft_ssl | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 | ./ft_ssl des-ofb -k 1234567890abcdef -v abcdef1234567890 -d | ./ft_ssl des-ofb -p pass -v abcdef1234567890 | 
+./ft_ssl des-ofb -p pass -v abcdef1234567890 -d | ./ft_ssl des-ofb -v abcdef1234567890 -p hola -s 1234567890 | ./ft_ssl des-ofb -v abcdef1234567890 -p hola -s 1234567890 -d -o ft_ssl2 && chmod u+x ft_ssl2 && ./ft_ssl2

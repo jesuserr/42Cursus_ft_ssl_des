@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 19:23:26 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/09 12:56:36 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 20:49:52 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 // priority over pipe, so if both are provided, the pipe will be ignored.
 void	calls_to_encrypt_function(t_encrypt_args *args)
 {
-	void	(*encrpyt_functions[])(t_encrypt_args *) = {des_ecb, des_cbc};
+	void	(*encrpyt_functions[])(t_encrypt_args *) = \
+			{des_ecb, des_cbc, des_cfb, des_ofb};
 
 	if (args->input_pipe)
 	{
@@ -47,7 +48,7 @@ void	print_encrypt_usage(void)
 	ft_printf("Usage\n"
 		"  ./ft_ssl <command> [flags] [file]\n\n"
 		"Cipher options:\n"
-		"  command     des, des-ecb or des-cbc\n"
+		"  command     des, des-ecb, des-cbc, des-cfb or des-ofb\n"
 		"  -h          print help and exit\n"
 		"  -a          decode/encode the input/output in base64\n"
 		"  -d          decrypt mode\n"

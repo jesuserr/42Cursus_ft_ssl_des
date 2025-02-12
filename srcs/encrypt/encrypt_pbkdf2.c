@@ -6,13 +6,17 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:03:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/12 11:57:59 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 12:46:31 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
 
+// # include <openssl/evp.h>
 // openssl function to generate key with PBKDF2 - kept for reference
+// derive_key_pbkdf2(args->pass, args->hex_salt, BLOCK_LENGTH, ITERATIONS, 
+// BLOCK_LENGTH, args->hex_key);
+/*
 static void	derive_key_pbkdf2(const char *password, const unsigned char *salt, \
 		int salt_len, int iterations, int key_len, unsigned char *output_key)
 {
@@ -20,6 +24,7 @@ static void	derive_key_pbkdf2(const char *password, const unsigned char *salt, \
 	iterations, EVP_sha256(), key_len, output_key) == 0)
 		fprintf(stderr, "Error generating key with PBKDF2\n");
 }
+*/
 
 // Password padding for HMAC_SHA256 - Just called once
 // https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.198-1.pdf
@@ -81,8 +86,7 @@ void	generate_derived_key(t_encrypt_args *args)
 	uint8_t		j;	
 	uint64_t	i;
 
-	(void)derive_key_pbkdf2;			// BORRAR
-	//derive_key_pbkdf2(args->pass, args->hex_salt, BLOCK_LENGTH, ITERATIONS, BLOCK_LENGTH, args->hex_key);
+	ft_bzero(&args->hmac_data, sizeof(t_hmac_data));
 	check_password_length(args);
 	ft_memcpy(args->hmac_data.prf_input, args->hex_salt, BLOCK_LENGTH);
 	args->hmac_data.prf_input[11] = 0x01;

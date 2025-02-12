@@ -6,7 +6,7 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 17:09:51 by jesuserr          #+#    #+#              #
-#    Updated: 2025/02/11 19:58:41 by jesuserr         ###   ########.fr        #
+#    Updated: 2025/02/12 13:06:51 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ DEPS = $(addprefix $(PATH_DEPS), $(SRCS:.c=.d))
 INCLUDE = -I./ -I./libft/includes/
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror -g -pedantic -Wshadow
-LDFLAGS = -lbsd -lcrypto
+LDFLAGS = -lbsd
 
 NORM = $(addprefix $(PATH_SRCS), $(SRCS)) #$(PATH_INCS)*.h
 GREEN = "\033[0;92m"

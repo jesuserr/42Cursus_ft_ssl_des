@@ -6,13 +6,13 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:03:09 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/12 12:46:31 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:06:42 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/ft_ssl.h"
 
-// # include <openssl/evp.h>
+// # include <openssl/evp.h> and LDFLAGS = -lcrypto in Makefile
 // openssl function to generate key with PBKDF2 - kept for reference
 // derive_key_pbkdf2(args->pass, args->hex_salt, BLOCK_LENGTH, ITERATIONS, 
 // BLOCK_LENGTH, args->hex_key);

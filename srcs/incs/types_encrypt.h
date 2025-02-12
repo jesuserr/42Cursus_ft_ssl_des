@@ -6,12 +6,18 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 20:48:16 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/11 20:05:34 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:43:20 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TYPES_ENCRYPT_H
 # define TYPES_ENCRYPT_H
+
+/*
+** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
+**                              HEADERS
+*/
+# include "../incs/sha256.h"			// To include sha256 definitions
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
@@ -27,11 +33,23 @@
 # define SALT_TOTAL_LEN		16U			// (Salt string + Salt) length in bytes
 # define ROUNDS				16U			// Number of rounds for DES encryption
 # define BOXES				8U			// Number of S-boxes for DES encryption
+# define FIRST_ITER_SIZE	12U			// U1 size -> 12 bytes (Salt + INT_32)
+# define NEXT_ITERS_SIZE	32U			// U2 to Uiterations size -> 32 bytes
 
 /*
 ** -.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-.-'-
 **                              STRUCTS
 */
+typedef struct s_hmac_data
+{
+	uint8_t		k0[SHA256_BLOCK];
+	uint8_t		k0_ipad[SHA256_BLOCK];
+	uint8_t		k0_opad[SHA256_BLOCK];
+	uint8_t		sha256_digest[SHA256_OUTPUT_SIZE];
+	uint8_t		append[100];			// 96 bytes is the worst case (64 + 32)
+	uint8_t		prf_input[32];			// 1st iter Salt (8 bytes) + i (4 bytes)
+}	t_hmac_data;						// from 2nd... -> 32 bytes
+
 typedef struct s_encrypt_args
 {
 	char		*input_pipe;
@@ -64,7 +82,7 @@ typedef struct s_encrypt_args
 	uint8_t		output_block[BLOCK_LENGTH];
 	uint8_t		*ciphertext;
 	uint8_t		*plaintext;
-	uint8_t		sha256_digest[32];
+	t_hmac_data	hmac_data;
 }	t_encrypt_args;
 
 // Permutation tables for DES encryption. Example: for 'g_pc1_table' the first

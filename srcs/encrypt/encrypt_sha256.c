@@ -6,7 +6,7 @@
 /*   By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:37:43 by jesuserr          #+#    #+#             */
-/*   Updated: 2025/02/11 20:03:59 by jesuserr         ###   ########.fr       */
+/*   Updated: 2025/02/11 22:11:32 by jesuserr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ static void	modify_digest(t_sha256_data *ssl_data, t_encrypt_args *encrypt_args)
 	i = 0;
 	while (i < 8)
 		modify_endianness_32_bits(&ssl_data->digest[i++]);
-	ft_memcpy(encrypt_args->sha256_digest, ssl_data->digest, 32);
+	ft_memcpy(encrypt_args->hmac_data.sha256_digest, ssl_data->digest, 32);
 }
 
 // Main function to calculate the SHA256 digest.

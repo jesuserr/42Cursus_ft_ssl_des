@@ -6,7 +6,7 @@
 #    By: jesuserr <jesuserr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 17:09:51 by jesuserr          #+#    #+#              #
-#    Updated: 2025/02/12 23:53:46 by jesuserr         ###   ########.fr        #
+#    Updated: 2026/02/25 21:03:27 by jesuserr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ DEPS = $(addprefix $(PATH_DEPS), $(SRCS:.c=.d))
 
 INCLUDE = -I./ -I./libft/includes/
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -g -pedantic -Wshadow
+CFLAGS = -Wall -Wextra -Werror -O3 -pedantic -Wshadow
 LDFLAGS = -lbsd
 
 NORM = $(addprefix $(PATH_SRCS), $(SRCS)) #$(PATH_INCS)*.h

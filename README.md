@@ -67,9 +67,10 @@ When neither `-k` nor `-p` is provided the program prompts for a password intera
 
 The following table summarises what happens for every relevant combination of `-k`, `-p`, and `-s` during **encryption**. Decryption mirrors this: if the ciphertext begins with the `Salted__` header the salt is extracted automatically; otherwise the user must supply the same key or password+salt that was used to encrypt.
 
-| `-k` | `-p` / interactive | `-s` | Key source | Salt used | `Salted__` header in output |
-|:----:|:-----------------:|:----:|------------|-----------|:---------------------------:|
+| -k | `-p` / interactive | -s | Key source | Salt used | `Salted__` header in output |
+|:--:|:-----------------:|:--:|------------|-----------|:---------------------------:|
 | ✗ | ✗ (interactive) | ✗ | PBKDF2-HMAC-SHA256 from console password | Random (from `/dev/urandom`) | ✅ prepended |
+| ✗ | ✗ (interactive) | ✅ | PBKDF2-HMAC-SHA256 from console password | User-provided (`-s`) | ✗ not prepended |
 | ✗ | ✅ | ✗ | PBKDF2-HMAC-SHA256 from `-p` password | Random (from `/dev/urandom`) | ✅ prepended |
 | ✗ | ✅ | ✅ | PBKDF2-HMAC-SHA256 from `-p` password | User-provided (`-s`) | ✗ not prepended |
 | ✅ | ✗ | ✗ | Direct hex key (`-k`), no derivation | None | ✗ not prepended |
